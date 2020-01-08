@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">madad_pro</string>
+    <string name="signUp">Signup</string>
+    <string name="signIn">Signin</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">sign_up</string>
+    <string name="signup">Signup</string>
+    <string name="title_activity_help">Map</string>
+    <string name="signin">Signin</string>
+</resources>
