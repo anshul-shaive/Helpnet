@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Information"
+        android:textColor="#000000"
+        android:textSize="36sp"
+        android:layout_margin="25dp"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Involve Authorities"
+        android:textSize="24sp"
+        android:layout_margin="20dp"
+        android:switchPadding="12dp"
+        android:switchMinWidth="36dp"
+        android:padding="8dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/information"/>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/switch1"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="20dp"
+        android:entries="@array/emergency_arrays"
+        android:prompt="@string/emergency_prompt"/>
+
+
+</RelativeLayout>

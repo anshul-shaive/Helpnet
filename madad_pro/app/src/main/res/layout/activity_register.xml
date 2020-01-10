@@ -11,16 +11,24 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="400dp"
         android:text="@string/signup"
-        android:textSize="40sp"
         android:textColor="#004D40"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.278" />
+        app:layout_constraintVertical_bias="0.03" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -32,8 +40,8 @@
         app:layout_constraintVertical_bias="0.713">
 
 
-        <TextView
-            android:id="@+id/textView2"
+        <EditText
+            android:id="@+id/textView1"
             android:layout_width="300dp"
             android:layout_height="40dp"
             android:layout_margin="8dp"
@@ -41,27 +49,47 @@
             android:hint="Full name"
             android:textSize="25dp" />
 
-        <TextView
-            android:id="@+id/textView4"
+        <EditText
+            android:id="@+id/textView2"
             android:layout_width="300dp"
             android:layout_height="40dp"
             android:layout_margin="8dp"
             android:background="#E8F5E9"
             android:hint="Aadhar no."
             android:textSize="25dp" />
-        <TextView
+
+        <EditText
+            android:id="@+id/textView3"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:background="#E8F5E9"
+            android:hint="Mobile no."
+            android:textSize="25dp" />
+
+        <EditText
+            android:id="@+id/textView4"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:background="#E8F5E9"
+            android:hint="Password"
+            android:textSize="25dp" />
+
+        <EditText
             android:id="@+id/textView5"
             android:layout_width="300dp"
             android:layout_height="40dp"
             android:layout_margin="8dp"
             android:background="#E8F5E9"
-            android:hint="Mobilr no."
+            android:hint="Confirm Password"
             android:textSize="25dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/button3"

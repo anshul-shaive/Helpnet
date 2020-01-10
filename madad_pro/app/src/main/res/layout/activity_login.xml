@@ -42,7 +42,7 @@
             android:textColor="#212121"
             android:textSize="30dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/textView2"
             android:layout_width="300dp"
             android:layout_height="40dp"
@@ -61,7 +61,7 @@
             android:textColor="#212121"
             android:textSize="25dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/textView4"
             android:layout_width="300dp"
             android:layout_height="40dp"
