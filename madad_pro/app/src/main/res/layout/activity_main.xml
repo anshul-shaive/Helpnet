@@ -39,7 +39,7 @@
             android:layout_gravity="center"
             android:layout_margin="30dp"
             android:onClick="helpOthers"
-            android:text="Help Others fuck" />
+            android:text="Help Others" />
 
         <Button
             android:id="@+id/button9"
