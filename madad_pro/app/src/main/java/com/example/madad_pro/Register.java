@@ -35,7 +35,7 @@ public class Register extends AppCompatActivity {
 
     String data;
     RequestQueue queue;
-    public String url = "http://172.16.19.219:8000/accounts/register";
+    public String url = "http://172.16.19.219:8000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class Register extends AppCompatActivity {
     {
         super.onBackPressed();
         Intent intent;
-        Toast.makeText(this,"Registraion left incomplete",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"Registration left incomplete",Toast.LENGTH_SHORT).show();
         intent = new Intent(Register.this, Option.class);
         startActivity(intent);
         Register.this.finish();
@@ -68,6 +68,7 @@ public class Register extends AppCompatActivity {
     }
     public void confirm(View view)
     {
+
         Intent intent =new Intent(Register.this,Otp.class);
         startActivity(intent);
         Register.this.finish();
@@ -77,6 +78,7 @@ public class Register extends AppCompatActivity {
         password = editpassword.getText().toString();
         conf_password = editconf_password.getText().toString();
         sendAndRequestResponse();
+
     }
 
     private void sendAndRequestResponse() {
@@ -88,7 +90,7 @@ public class Register extends AppCompatActivity {
                     public void onResponse(String response) {
                         // response
                         Log.d("Response", response);
-                        Toast.makeText(Register.this, "Response " + response, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(Register.this, "Response " + response, Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -102,15 +104,23 @@ public class Register extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("first_name",""+fullname);
-                params.put("last_name",""+aadhar);
-                params.put("username",""+mob_no);
-                params.put("email",""+password);
-                params.put("password",""+conf_password);
+                params.put("fullname","" +fullname);
+                params.put("aadhar",""+aadhar);
+                params.put("phone",""+mob_no);
+                params.put("username","");
+                params.put("phelped","");
+                params.put("last_loc","");
+                params.put("avg_rating","");
+                params.put("verified","");
+                params.put("password",""+password);
+
                 return params;
             }
         };
-        queue.add(postRequest);
+
+        if(conf_password.equals(password)) {
+            queue.add(postRequest);
+        }
     }
 
 }
