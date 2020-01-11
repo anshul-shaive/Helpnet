@@ -10,20 +10,20 @@
         android:layout_alignParentTop="true"
         android:text="Information"
         android:textColor="#000000"
-        android:textSize="36sp"
-        android:layout_margin="25dp"
+        android:textSize="24sp"
+        android:layout_margin="20dp"
         android:layout_centerHorizontal="true"
-        android:textStyle="bold" />
+        />
 
     <Switch
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Involve Authorities"
-        android:textSize="24sp"
-        android:layout_margin="20dp"
+        android:text="Authorities"
+        android:textSize="18sp"
+        android:layout_margin="16dp"
         android:switchPadding="12dp"
-        android:switchMinWidth="36dp"
+        android:switchMinWidth="24dp"
         android:padding="8dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/information"/>
@@ -34,9 +34,40 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/switch1"
         android:layout_alignParentLeft="true"
-        android:layout_margin="20dp"
+        android:layout_margin="16dp"
         android:entries="@array/emergency_arrays"
         android:prompt="@string/emergency_prompt"/>
+
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="25dp"
+        android:onClick="negative"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        android:textColor="#2E7D32"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="8dp"
+        android:onClick="positive"
+        android:text="Confirm"
+        android:textAllCaps="false"
+        android:textColor="#2E7D32"
+        android:textSize="20sp"
+        android:layout_marginBottom="16dp"/>
+
 
 
 </RelativeLayout>

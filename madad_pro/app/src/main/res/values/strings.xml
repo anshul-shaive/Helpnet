@@ -22,7 +22,9 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="emergency_prompt">Choose Emergency Type</string>
+    <string name="request">Request</string>
     <string-array name="emergency_arrays">
+        <item>Emergency</item>
         <item>Harassment</item>
         <item>Theft</item>
         <item>Violence</item>

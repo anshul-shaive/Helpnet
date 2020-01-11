@@ -7,7 +7,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,6 +18,12 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,7 +35,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class help extends FragmentActivity implements OnMapReadyCallback {
-
+    final Context context = this;
     private GoogleMap mMap;
 
     LocationManager locationManager;
@@ -54,6 +63,14 @@ public class help extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Button request = findViewById(R.id.request);
+        request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
 
     }
 
@@ -116,15 +133,11 @@ public class help extends FragmentActivity implements OnMapReadyCallback {
         }
 
 
-
-    }
-    public void dialog(View view)
-    {
-        openDialog();
     }
     public void openDialog()
     {
-
+        dialog_handler exampleDialog = new dialog_handler();
+        exampleDialog.show(getSupportFragmentManager(), "example dialog");
     }
     }
 

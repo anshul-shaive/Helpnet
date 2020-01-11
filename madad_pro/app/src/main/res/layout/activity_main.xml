@@ -8,16 +8,12 @@
     android:background="#A5D6A7">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginRight="60dp"
+        android:layout_width="239dp"
+        android:layout_height="338dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.475">
@@ -39,7 +35,7 @@
             android:layout_gravity="center"
             android:layout_margin="30dp"
             android:onClick="helpOthers"
-            android:text="Help Others" />
+            android:text="Help Othr" />
 
         <Button
             android:id="@+id/button9"
