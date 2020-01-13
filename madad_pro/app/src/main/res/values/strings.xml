@@ -30,4 +30,8 @@
         <item>Violence</item>
         <item>Suspicious Activity</item>
     </string-array>
+
+    <string name="title_activity_splash">Splash</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

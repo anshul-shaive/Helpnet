@@ -35,7 +35,9 @@ public class Register extends AppCompatActivity {
 
     String data;
     RequestQueue queue;
-    public String url = "http://172.16.19.219:8000";
+//    public String url = "http://172.16.19.219:8000";
+    public String url = "http://192.168.0.4:8000";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +45,9 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         editfullname=(EditText)findViewById(R.id.textView1);
-        editaadhar=(EditText)findViewById(R.id.textView2);
+        editaadhar=(EditText)findViewById(R.id.edit_username);
         editmob_no=(EditText)findViewById(R.id.textView3);
-        editpassword=(EditText)findViewById(R.id.textView4);
+        editpassword=(EditText)findViewById(R.id.edit_password);
         editconf_password=(EditText)findViewById(R.id.textView5);
 
 
@@ -68,10 +70,6 @@ public class Register extends AppCompatActivity {
     }
     public void confirm(View view)
     {
-
-        Intent intent =new Intent(Register.this,Otp.class);
-        startActivity(intent);
-        Register.this.finish();
         fullname = editfullname.getText().toString();
         aadhar = editaadhar.getText().toString();
         mob_no = editmob_no.getText().toString();
@@ -89,8 +87,13 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         // response
-                        Log.d("Response", response);
-//                        Toast.makeText(Register.this, "Response " + response, Toast.LENGTH_LONG).show();
+//                        Log.d("Response", response);
+//
+
+                        Intent intent =new Intent(Register.this,Otp.class);
+                        startActivity(intent);
+                        Register.this.finish();
+                        Toast.makeText(Register.this, "Registered" , Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {

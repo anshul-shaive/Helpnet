@@ -26,7 +26,7 @@ public class Otp extends AppCompatActivity {
     }
     public void submit(View view)
     {
-        Intent intent = new Intent(Otp.this,help.class);
+        Intent intent = new Intent(Otp.this,MainActivity.class);
         startActivity(intent);
         Otp.this.finish();
     }
