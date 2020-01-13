@@ -36,7 +36,8 @@ public class Register extends AppCompatActivity {
     String data;
     RequestQueue queue;
 //    public String url = "http://172.16.19.219:8000";
-    public String url = "http://192.168.0.4:8000";
+//    public String url = "http://192.168.0.4:8000";
+public String url = "http://172.16.18.33:8000";
 
 
     @Override
@@ -88,12 +89,14 @@ public class Register extends AppCompatActivity {
                     public void onResponse(String response) {
                         // response
 //                        Log.d("Response", response);
-//
 
-                        Intent intent =new Intent(Register.this,Otp.class);
-                        startActivity(intent);
-                        Register.this.finish();
-                        Toast.makeText(Register.this, "Registered" , Toast.LENGTH_LONG).show();
+                        if(response.equals("Registered")) {
+                            Intent intent = new Intent(Register.this, Otp.class);
+
+                            startActivity(intent);
+                            Register.this.finish();
+                        }
+                        Toast.makeText(Register.this, ""+response , Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
