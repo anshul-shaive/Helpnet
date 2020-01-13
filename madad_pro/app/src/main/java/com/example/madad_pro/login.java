@@ -1,5 +1,6 @@
 package com.example.madad_pro;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -23,6 +24,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import dmax.dialog.SpotsDialog;
 
 public class login extends AppCompatActivity {
 
@@ -50,6 +53,8 @@ public class login extends AppCompatActivity {
         username = editusername.getText().toString();
         password = editpassword.getText().toString();
         sendAndRequestResponse();
+
+
 /*
         //uncomment to test MainActivity without server
 
@@ -72,6 +77,9 @@ public class login extends AppCompatActivity {
 
     private void sendAndRequestResponse() {
         queue = Volley.newRequestQueue(this);
+
+        final SpotsDialog spotsDialog = new SpotsDialog(login.this);
+        spotsDialog.show();
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -107,9 +115,11 @@ public class login extends AppCompatActivity {
                         Intent intent;
 
                         if(status.equals("verified")) {
+                            spotsDialog.dismiss();
                             intent = new Intent(login.this, MainActivity.class);
                         }
                         else {
+                            spotsDialog.dismiss();
                             intent = new Intent(login.this, Option.class);
                         }
 
