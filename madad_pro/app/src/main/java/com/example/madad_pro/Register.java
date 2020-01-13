@@ -19,6 +19,8 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import dmax.dialog.SpotsDialog;
+
 public class Register extends AppCompatActivity {
     private EditText editfullname;
     private EditText editaadhar;
@@ -36,7 +38,8 @@ public class Register extends AppCompatActivity {
     String data;
     RequestQueue queue;
 //    public String url = "http://172.16.19.219:8000";
-    public String url = "http://192.168.0.4:8000";
+  //  public String url = "http://192.168.0.4:8000";
+public String url = "http://172.16.18.33:8000";
 
 
     @Override
@@ -80,6 +83,9 @@ public class Register extends AppCompatActivity {
     }
 
     private void sendAndRequestResponse() {
+
+        final SpotsDialog spotsDialog = new SpotsDialog(Register.this);
+        spotsDialog.show();
         queue = Volley.newRequestQueue(this);
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -89,7 +95,7 @@ public class Register extends AppCompatActivity {
                         // response
 //                        Log.d("Response", response);
 //
-
+                        spotsDialog.dismiss();
                         Intent intent =new Intent(Register.this,Otp.class);
                         startActivity(intent);
                         Register.this.finish();

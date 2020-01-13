@@ -116,7 +116,7 @@ public class help extends FragmentActivity implements OnMapReadyCallback {
             }
         };
 
-        if (Build.VERSION.SDK_INT < 23) {
+        if (Build.VERSION.SDK_INT > 23) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    Activity#requestPermissions
@@ -151,5 +151,13 @@ public class help extends FragmentActivity implements OnMapReadyCallback {
         dialog_handler exampleDialog = new dialog_handler();
         exampleDialog.show(getSupportFragmentManager(), "example dialog");
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(help.this,MainActivity.class);
+        startActivity(i);
+        help.this.finish();
     }
+}
 

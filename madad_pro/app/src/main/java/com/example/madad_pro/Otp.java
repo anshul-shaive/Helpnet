@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import dmax.dialog.SpotsDialog;
+
 public class Otp extends AppCompatActivity {
 
     @Override
@@ -25,7 +27,8 @@ public class Otp extends AppCompatActivity {
         Otp.this.finish();
     }
     public void submit(View view)
-    {
+    {   //final SpotsDialog spotsDialog = new SpotsDialog(Otp.this);
+
         Intent intent = new Intent(Otp.this,MainActivity.class);
         startActivity(intent);
         Otp.this.finish();
