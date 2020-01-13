@@ -24,9 +24,6 @@ public class dialog_handler extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_box, null);
         builder.setView(view);
-       // Toast.makeText(this, "Requested", Toast.LENGTH_SHORT).show();
-        //final Dialog dialog = new Dialog(context);
-        //dialog.setContentView(R.layout.dialog_box);
         Spinner crime_category = view.findViewById(R.id.spinner);         //codingflow
         Switch auth_toggle = (Switch) view.findViewById(R.id.switch1);
         //Toast.makeText(this, "Switch: " + auth_toggle, Toast.LENGTH_SHORT).show();
