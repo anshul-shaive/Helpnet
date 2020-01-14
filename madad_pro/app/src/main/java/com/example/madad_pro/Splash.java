@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
+
+
 public class Splash extends Activity {
 
     private final int SPLASH_DISPLAY_LENGTH = 1000;

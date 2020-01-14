@@ -22,9 +22,6 @@ public class Requests extends AppCompatActivity {
         reqTextView.setText(request);
 
         Button respondButton = (Button)findViewById(R.id.resbutton);
-//        Intent mapintent = new Intent(Requests.this, MapsActivity.class);
-////        intent.putExtra("request_id",requests.get(position));
-//        startActivity(intent);
 ////        https://maps.googleapis.com/maps/api/geocode/json?latlng=23.267033,77.368417&key=AIzaSyAz_I96cGBltrjwzqFP4K9y2qrR07mOSxI
         respondButton.setOnClickListener(new View.OnClickListener() {
 

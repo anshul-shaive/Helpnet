@@ -1,25 +1,27 @@
 package com.example.madad_pro;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.android.volley.Response;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-//import com.google.android.gms.common.api.Response;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
+
+//import com.google.android.gms.common.api.Response;
 
 public class Register extends AppCompatActivity {
     private EditText editfullname;
@@ -38,8 +40,10 @@ public class Register extends AppCompatActivity {
     String data;
     RequestQueue queue;
 //    public String url = "http://172.16.19.219:8000";
-  //  public String url = "http://192.168.0.4:8000";
-public String url = "http://172.16.18.33:8000";
+//    public String url = "http://192.168.0.2:8000";
+//public String url = "http://172.16.18.33:8000";
+public String url = "http://172.16.18.164:8000";
+
 
 
     @Override
@@ -96,10 +100,14 @@ public String url = "http://172.16.18.33:8000";
 //                        Log.d("Response", response);
 //
                         spotsDialog.dismiss();
-                        Intent intent =new Intent(Register.this,Otp.class);
-                        startActivity(intent);
-                        Register.this.finish();
-                        Toast.makeText(Register.this, "Registered" , Toast.LENGTH_LONG).show();
+
+                        if(response.equals("Registered")) {
+                            Intent intent = new Intent(Register.this, Otp.class);
+                            startActivity(intent);
+                            Register.this.finish();
+
+                        }
+                        Toast.makeText(Register.this, ""+response, Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {

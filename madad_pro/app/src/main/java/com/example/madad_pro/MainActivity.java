@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     public void emergency(View view)
     {
         Intent intent = new Intent(MainActivity.this,help.class);
