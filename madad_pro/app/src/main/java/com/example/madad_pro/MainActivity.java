@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("user_id", 0);
         editor.apply();
 
+        ((MyApplication) MainActivity.this.getApplication()).setUser_id("");
+        ((MyApplication) MainActivity.this.getApplication()).setStatus("");
+
         Intent intent = new Intent(MainActivity.this,Option.class);
         startActivity(intent);
         MainActivity.this.finish();

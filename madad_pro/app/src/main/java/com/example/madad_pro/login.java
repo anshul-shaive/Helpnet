@@ -29,12 +29,9 @@ import dmax.dialog.SpotsDialog;
 
 public class login extends AppCompatActivity {
 
+ RequestQueue queue;
 
-    RequestQueue queue;
-//    public String url = "http://172.16.19.219:8000/login";
-//    public String url = "http://192.168.0.2:8000/login";
-//        public String url = "http://172.16.18.33:8000/login";
-public String url = "http://172.16.18.164:8000/login";
+public String url = "https://helpnet-web.herokuapp.com/login";
 
 
     EditText editusername;
@@ -50,24 +47,15 @@ public String url = "http://172.16.18.164:8000/login";
         editusername = (EditText) findViewById(R.id.edit_username);
         editpassword = (EditText) findViewById(R.id.edit_password);
     }
+
     public void signin(View view)
     {
         username = editusername.getText().toString();
         password = editpassword.getText().toString();
         sendAndRequestResponse();
 
-
-/*
-        //uncomment to test MainActivity without server
-
-        SharedPreferences.Editor editor = getSharedPreferences("token_sp", MODE_PRIVATE).edit();
-        editor.putString("token", "verified");
-        editor.putInt("user_id", 101);
-        editor.apply();
-
-*/
-
     }
+
     public void onBackPressed()
     {
         super.onBackPressed();
@@ -106,15 +94,13 @@ public String url = "http://172.16.18.164:8000/login";
                         }
                         Toast.makeText(login.this, "" + status, Toast.LENGTH_LONG).show();
 
-                        System.out.println(status);
-                        System.out.println(user_id);
-
                         SharedPreferences.Editor editor = getSharedPreferences("token_sp", MODE_PRIVATE).edit();
                         editor.putString("token", status);
                         editor.putInt("user_id", Integer.parseInt(user_id));
                         editor.apply();
 
-
+                        ((MyApplication) login.this.getApplication()).setUser_id(user_id);
+                        ((MyApplication) login.this.getApplication()).setStatus(status);
 
                         Intent intent;
 

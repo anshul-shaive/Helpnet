@@ -34,7 +34,7 @@ public class Splash extends Activity {
                 /* Create an Intent that will start the Menu-Activity. */
                 SharedPreferences prefs = getSharedPreferences("token_sp", MODE_PRIVATE);
                 String token = prefs.getString("token", "");
-                int user_id = prefs.getInt("user_id", 0);
+//                int user_id = prefs.getInt("user_id", 0);
 
                 Intent mainIntent;
 

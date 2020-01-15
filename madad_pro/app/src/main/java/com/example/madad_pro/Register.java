@@ -36,13 +36,9 @@ public class Register extends AppCompatActivity {
     public String password;
     public String conf_password;
 
-
-    String data;
     RequestQueue queue;
-//    public String url = "http://172.16.19.219:8000";
-//    public String url = "http://192.168.0.2:8000";
-//public String url = "http://172.16.18.33:8000";
-public String url = "http://172.16.18.164:8000";
+
+public String url = "https://helpnet-web.herokuapp.com/";
 
 
 

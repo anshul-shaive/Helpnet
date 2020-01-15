@@ -1,23 +1,17 @@
 package com.example.madad_pro;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
 public class MyApplication extends Application {
 
-
-//    SharedPreferences prefs = getSharedPreferences("token_sp", MODE_PRIVATE);
-//    String token = prefs.getString("token", "");
-//    int user_id = prefs.getInt("user_id", 0);
-
     String token ;
-    int user_id ;
+    String user_id ;
 
     public void setStatus(String someVariable) {
         this.token= someVariable;
     }
 
-    public void setUser_id(int someVariable) {
+    public void setUser_id(String someVariable) {
         this.user_id = someVariable;
     }
 
@@ -25,7 +19,7 @@ public class MyApplication extends Application {
         return token;
     }
 
-    public int getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 
