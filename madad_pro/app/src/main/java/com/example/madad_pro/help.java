@@ -125,7 +125,7 @@ public class help extends FragmentActivity implements OnMapReadyCallback {
                 LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(userLocation).title("You"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
-                CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
+                CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
                 mMap.animateCamera(zoom);
 
             }

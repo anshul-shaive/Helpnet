@@ -19,7 +19,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import dmax.dialog.SpotsDialog;
 
@@ -27,12 +31,20 @@ import dmax.dialog.SpotsDialog;
 public class dialog_handler extends AppCompatDialogFragment {
 
     RequestQueue queue;
-    public String url = "https://helpnet-web.herokuapp.com/request";
+//    public String url = "https://helpnet-web.herokuapp.com/request";
+    public String url = "http://172.16.19.45:8000/request";
+
 
     Boolean auth_involved;
     String crime;
 
     String user_id;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-dd/MM/yyyy", Locale.getDefault());
+
+//You can change "yyyyMMdd_HHmmss as per your requirement
+
+    String currentDateandTime = sdf.format(new Date());
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -120,7 +132,7 @@ public class dialog_handler extends AppCompatDialogFragment {
                 params.put("status","active");
                 params.put("username","");
                 params.put("user_id",""+user_id);
-                params.put("req_time","");
+                params.put("req_time",""+currentDateandTime);
                 params.put("nprespond","");
                 params.put("location","");
                 params.put("presponded_ids","");
