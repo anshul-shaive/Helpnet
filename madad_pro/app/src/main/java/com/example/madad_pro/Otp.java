@@ -29,7 +29,9 @@ public class Otp extends AppCompatActivity {
     public void submit(View view)
     {   //final SpotsDialog spotsDialog = new SpotsDialog(Otp.this);
 
-        Intent intent = new Intent(Otp.this,MainActivity.class);
+        Intent intent = new Intent(Otp.this,Option.class);
+        Toast.makeText(this,"You need to Login",Toast.LENGTH_SHORT).show();
+
         startActivity(intent);
         Otp.this.finish();
     }
