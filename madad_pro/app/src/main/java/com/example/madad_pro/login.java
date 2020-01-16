@@ -2,6 +2,7 @@ package com.example.madad_pro;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +39,7 @@ public String url = "https://helpnet-web.herokuapp.com/login";
 
     EditText editusername;
     EditText editpassword;
+    CoordinatorLayout coordinatorLayout;
 
     public String username;
     public String password;
@@ -111,6 +114,7 @@ public String url = "https://helpnet-web.herokuapp.com/login";
                         }
                         else {
                             spotsDialog.dismiss();
+                            Snackbar incorrect = Snackbar.make(coordinatorLayout,"Incorrect Username Or Password",Snackbar.LENGTH_LONG);
                             intent = new Intent(login.this, Option.class);
                         }
 
