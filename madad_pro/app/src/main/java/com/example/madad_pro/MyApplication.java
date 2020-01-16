@@ -6,6 +6,8 @@ public class MyApplication extends Application {
 
     String token ;
     String user_id ;
+    Double lat;
+    Double lng;
 
     public void setStatus(String someVariable) {
         this.token= someVariable;
@@ -13,6 +15,14 @@ public class MyApplication extends Application {
 
     public void setUser_id(String someVariable) {
         this.user_id = someVariable;
+    }
+
+    public void setLat(Double someVariable) {
+        this.lat = someVariable;
+    }
+
+    public void setLng(Double someVariable) {
+        this.lng = someVariable;
     }
 
     public String getStatus() {
@@ -23,6 +33,13 @@ public class MyApplication extends Application {
         return user_id;
     }
 
+    public Double getLat() {
+        return lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
 
 
 

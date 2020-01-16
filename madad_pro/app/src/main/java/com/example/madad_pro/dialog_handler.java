@@ -11,10 +11,12 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import com.android.volley.RequestQueue;
+
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -25,26 +27,27 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
 import dmax.dialog.SpotsDialog;
 
 
-public class dialog_handler extends AppCompatDialogFragment {
-
-    RequestQueue queue;
-//    public String url = "https://helpnet-web.herokuapp.com/request";
-    public String url = "http://172.16.19.45:8000/request";
+public class dialog_handler extends AppCompatDialogFragment{
 
 
-    Boolean auth_involved;
-    String crime;
+       private String url = "https://helpnet-web.herokuapp.com/request";
+//    private String url = "http://172.16.19.45:8000/request";
 
-    String user_id;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-dd/MM/yyyy", Locale.getDefault());
+    private Boolean auth_involved;
+    private String crime;
 
-//You can change "yyyyMMdd_HHmmss as per your requirement
+    private String user_id;
+    private Double Lat;
+    private Double Lng;
 
-    String currentDateandTime = sdf.format(new Date());
+    private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-dd/MM/yyyy", Locale.getDefault());
+
+    private String currentDateandTime = sdf.format(new Date());
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -58,6 +61,9 @@ public class dialog_handler extends AppCompatDialogFragment {
         Switch auth_toggle = (Switch) view.findViewById(R.id.switch1);
 
         user_id = ((MyApplication) getActivity().getApplication()).getUser_id();
+        Lat = ((MyApplication) getActivity().getApplication()).getLat();
+        Lng = ((MyApplication) getActivity().getApplication()).getLng();
+
 
         crime_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -101,7 +107,7 @@ public class dialog_handler extends AppCompatDialogFragment {
 
         final SpotsDialog spotsDialog = new SpotsDialog(getContext());
         spotsDialog.show();
-        queue = Volley.newRequestQueue(getContext());
+        RequestQueue queue = Volley.newRequestQueue(getContext());
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -134,7 +140,7 @@ public class dialog_handler extends AppCompatDialogFragment {
                 params.put("user_id",""+user_id);
                 params.put("req_time",""+currentDateandTime);
                 params.put("nprespond","");
-                params.put("location","");
+                params.put("location",""+Lat+"-"+Lng);
                 params.put("presponded_ids","");
                 params.put("passigned_ids","");
 
