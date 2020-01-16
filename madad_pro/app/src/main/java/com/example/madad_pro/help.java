@@ -23,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -42,6 +43,13 @@ public class help extends FragmentActivity implements OnMapReadyCallback {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                    Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    mMap.clear();
+                    LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(userLocation).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
+                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+                    mMap.animateCamera(zoom);
                 }
             }
         }
@@ -79,11 +87,10 @@ public class help extends FragmentActivity implements OnMapReadyCallback {
             public void onLocationChanged(Location location) {
                 mMap.clear();
                 LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(userLocation).title("You"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
-
-                ((MyApplication) help.this.getApplication()).setLat(location.getLatitude());
-                ((MyApplication) help.this.getApplication()).setLng(location.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
+                CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+                mMap.animateCamera(zoom);
 
             }
 
@@ -106,6 +113,14 @@ public class help extends FragmentActivity implements OnMapReadyCallback {
         if (Build.VERSION.SDK_INT > 23) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    Activity#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
                 return;
             }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
@@ -117,9 +132,9 @@ public class help extends FragmentActivity implements OnMapReadyCallback {
                 Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 mMap.clear();
                 LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(userLocation).title("You"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
-                CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
+                mMap.addMarker(new MarkerOptions().position(userLocation).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,16));
+                CameraUpdate zoom=CameraUpdateFactory.zoomTo(16);
                 mMap.animateCamera(zoom);
 
             }
