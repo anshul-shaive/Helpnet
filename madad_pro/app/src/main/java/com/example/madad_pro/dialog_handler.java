@@ -86,6 +86,7 @@ public class dialog_handler extends AppCompatDialogFragment{
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),help.class);
                 startActivity(intent);
+                getActivity().finish();
             }
         });
 
@@ -93,6 +94,7 @@ public class dialog_handler extends AppCompatDialogFragment{
             @Override
             public void onClick(View v) {
                 sendAndRequestResponse();
+
             }
         });
 
@@ -112,7 +114,7 @@ public class dialog_handler extends AppCompatDialogFragment{
                         spotsDialog.dismiss();
                         Intent intent = new Intent(getContext(),HelpInfo.class);
                         startActivity(intent);
-
+                        getActivity().finish();
                     }
                 },
                 new Response.ErrorListener() {

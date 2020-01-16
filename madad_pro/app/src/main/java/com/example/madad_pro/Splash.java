@@ -31,13 +31,13 @@ public class Splash extends Activity {
         editor.apply();
 
 */
-                /* Create an Intent that will start the Menu-Activity. */
                 SharedPreferences prefs = getSharedPreferences("token_sp", MODE_PRIVATE);
                 String token = prefs.getString("token", "");
                 int user_id = prefs.getInt("user_id", 0);
 
                 ((MyApplication) Splash.this.getApplication()).setUser_id(Integer.toString(user_id));
                 ((MyApplication) Splash.this.getApplication()).setStatus(token);
+
                 Intent mainIntent;
 
                 if(token.equals("verified")) {
@@ -46,6 +46,7 @@ public class Splash extends Activity {
                 else {
                      mainIntent = new Intent(Splash.this, Option.class);
                 }
+
                 Splash.this.startActivity(mainIntent);
                 Splash.this.finish();
             }

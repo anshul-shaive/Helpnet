@@ -1,23 +1,25 @@
 package com.example.madad_pro;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
 
-
+    /////////////////////////////////////////////////////////////////
     public void emergency(View view)
     {
         Intent intent = new Intent(MainActivity.this,help.class);
@@ -51,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         super.onBackPressed();
-        MainActivity.this.finish();
+//        MainActivity.this.finish();
     }
+
+
+
 }

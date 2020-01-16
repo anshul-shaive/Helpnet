@@ -26,6 +26,7 @@ public class Otp extends AppCompatActivity {
         startActivity(intent);
         Otp.this.finish();
     }
+
     public void submit(View view)
     {   //final SpotsDialog spotsDialog = new SpotsDialog(Otp.this);
 
