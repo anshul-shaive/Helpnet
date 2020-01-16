@@ -43,4 +43,13 @@ public class Helper extends AppCompatActivity {
         });
 
     }
+
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        Intent intent;
+        intent = new Intent(Helper.this, MainActivity.class);
+        startActivity(intent);
+        Helper.this.finish();
+    }
 }

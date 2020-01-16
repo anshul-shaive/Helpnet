@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 public class Option extends AppCompatActivity {
 
@@ -16,11 +17,18 @@ public class Option extends AppCompatActivity {
         Option.this.finish();
     }
 
+
     public void register(View view)
     {
         //Toast.makeText(this, "LOGIN", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this,Register.class);
         startActivity(intent);
+        Option.this.finish();
+    }
+
+    public void onBackPressed()
+    {
+        super.onBackPressed();
         Option.this.finish();
     }
 

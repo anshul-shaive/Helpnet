@@ -4,8 +4,8 @@ import android.app.Application;
 
 public class MyApplication extends Application {
 
-    String token ;
-    String user_id ;
+    String token;
+    String user_id;
     Double lat;
     Double lng;
 
