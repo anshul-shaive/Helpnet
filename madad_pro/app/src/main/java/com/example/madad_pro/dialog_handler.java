@@ -11,23 +11,19 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
 import dmax.dialog.SpotsDialog;
 
 
@@ -38,12 +34,12 @@ public class dialog_handler extends AppCompatDialogFragment{
 //    private String url = "http://172.16.19.45:8000/request";
 
 
-    private Boolean auth_involved;
+    private Boolean auth_involved= false;
     private String crime;
 
     private String user_id;
-    private Double Lat;
-    private Double Lng;
+    private Double Lat =0.0;
+    private Double Lng =0.0;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-dd/MM/yyyy", Locale.getDefault());
 
@@ -140,7 +136,7 @@ public class dialog_handler extends AppCompatDialogFragment{
                 params.put("user_id",""+user_id);
                 params.put("req_time",""+currentDateandTime);
                 params.put("nprespond","");
-                params.put("location",""+Lat+"-"+Lng);
+                params.put("location",""+Lat+":"+Lng);
                 params.put("presponded_ids","");
                 params.put("passigned_ids","");
 
