@@ -42,7 +42,7 @@ public class LocActivity extends AppCompatActivity {
     }
 
     @SuppressLint("MissingPermission")
-    private void getLastLocation(){
+    public  void getLastLocation(){
         if (checkPermissions()) {
             if (isLocationEnabled()) {
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(
