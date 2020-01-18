@@ -1,8 +1,5 @@
 package com.example.madad_pro;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,9 +11,22 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -25,18 +35,33 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import dmax.dialog.SpotsDialog;
+
+
 public class MainActivity extends AppCompatActivity {
 
     int PERMISSION_ID = 44;
     FusedLocationProviderClient mFusedLocationClient;
+     private String url = "http://192.168.0.5:8000/loc";
 
+    int user_id;
+
+     Double Lat, Lng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        SharedPreferences prefs = getSharedPreferences("token_sp", MODE_PRIVATE);
+        user_id = prefs.getInt("user_id", 0);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+
     }
 
     @SuppressLint("MissingPermission")
@@ -73,9 +98,9 @@ public class MainActivity extends AppCompatActivity {
 
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(5000);
-        mLocationRequest.setFastestInterval(2000);
-//        mLocationRequest.setNumUpdates(1);
+        mLocationRequest.setInterval(0);
+        mLocationRequest.setFastestInterval(0);
+        mLocationRequest.setNumUpdates(1);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocationClient.requestLocationUpdates(
@@ -147,9 +172,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void helpOthers(View view)
     {
-        Intent intent = new Intent(MainActivity.this,Helper.class);
-        startActivity(intent);
-        MainActivity.this.finish();
+        sendAndRequestResponse();
+
     }
 
     public void logout(View view)
@@ -174,6 +198,71 @@ public class MainActivity extends AppCompatActivity {
 //        MainActivity.this.finish();
     }
 
+    private void sendAndRequestResponse(){
+
+        final SpotsDialog spotsDialog = new SpotsDialog(MainActivity.this);
+        spotsDialog.show();
+
+        Lat = ((MyApplication) MainActivity.this.getApplication()).getLat();
+        Lng = ((MyApplication) MainActivity.this.getApplication()).getLng();
+
+        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        JSONObject jObject=new JSONObject();
+
+                        try {
+                            jObject = new JSONObject(response);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        spotsDialog.dismiss();
+
+                        Intent intent = new Intent(MainActivity.this,Helper2.class);
+                        intent.putExtra("json",jObject.toString());
+                        startActivity(intent);
+                        MainActivity.this.finish();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", String.valueOf(error));
+                    }
+                }
+
+        )
 
 
+        {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("user_id","" +user_id);
+                params.put("last_loc",""+Lat+":"+Lng);
+
+                return params;
+            }
+
+        };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
+
+        queue.add(postRequest);
+
+    }
 }
+
+
