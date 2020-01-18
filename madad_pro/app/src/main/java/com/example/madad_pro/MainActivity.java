@@ -55,12 +55,13 @@ public class MainActivity extends AppCompatActivity {
      Double Lat, Lng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        getLastLocation();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences prefs = getSharedPreferences("token_sp", MODE_PRIVATE);
         user_id = prefs.getInt("user_id", 0);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        getLastLocation();
+
 
     }
 

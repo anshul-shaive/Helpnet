@@ -24,6 +24,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import dmax.dialog.SpotsDialog;
+
 public class Requests extends AppCompatActivity {
 
     String req_id,req_type,status,username,req_time,location,nprespond,auth_resp="";
@@ -77,8 +79,7 @@ public class Requests extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Requests.this, MapsActivity.class);
-                startActivity(intent);
+
                 sendAndRequestResponse();
             }
         });
@@ -87,16 +88,18 @@ public class Requests extends AppCompatActivity {
     private void sendAndRequestResponse(){
 
 
-
+        final SpotsDialog spotsDialog = new SpotsDialog(Requests.this);
+        spotsDialog.show();
         RequestQueue queue = Volley.newRequestQueue(Requests.this);
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Intent intent = new Intent(Requests.this,Helper.class);
+                        spotsDialog.dismiss();
+                        Intent intent = new Intent(Requests.this, MapsActivity.class);
+                        intent.putExtra("req_location",location);
                         startActivity(intent);
-                        Requests.this.finish();
 
                     }
                 },
