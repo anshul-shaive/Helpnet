@@ -23,14 +23,18 @@ public class help2 extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private Double Lat=0.0;
     private Double Lng=0.0;
+    SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Lat = ((MyApplication) help2.this.getApplication()).getLat();
+        Lng = ((MyApplication) help2.this.getApplication()).getLng();
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_help2);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -50,15 +54,12 @@ public class help2 extends FragmentActivity implements OnMapReadyCallback {
 
         mMap = googleMap;
 
-        Lat = ((MyApplication) help2.this.getApplication()).getLat();
-        Lng = ((MyApplication) help2.this.getApplication()).getLng();
-
         mMap.clear();
         LatLng userLocation = new LatLng(Lat, Lng);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.addMarker(new MarkerOptions().position(userLocation).title("You"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(18);
-        mMap.animateCamera(zoom);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
+
 
     }
 

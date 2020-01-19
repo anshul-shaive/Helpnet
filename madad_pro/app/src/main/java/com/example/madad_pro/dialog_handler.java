@@ -84,7 +84,7 @@ public class dialog_handler extends AppCompatDialogFragment{
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),help.class);
+                Intent intent = new Intent(getContext(),help2.class);
                 startActivity(intent);
                 getActivity().finish();
             }
@@ -113,6 +113,9 @@ public class dialog_handler extends AppCompatDialogFragment{
                     public void onResponse(String response) {
                         spotsDialog.dismiss();
                         Intent intent = new Intent(getContext(),HelpInfo.class);
+                        intent.putExtra("req_id",response);
+                        intent.putExtra("loc",""+Lat+":"+Lng);
+
                         startActivity(intent);
                         getActivity().finish();
                     }
