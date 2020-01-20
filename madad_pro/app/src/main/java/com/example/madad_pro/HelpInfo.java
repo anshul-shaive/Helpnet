@@ -39,7 +39,7 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
     private Double Lat=0.0;
     private Double Lng=0.0;
     private String req_id,loc;
-    private String url = "http://192.168.0.5:8000/helpinfo";
+    private String url = "http://172.16.16.243:8000/helpinfo";
     private String res;
 
     SpotsDialog spotsDialog;
@@ -88,19 +88,34 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
 
         mMap = googleMap;
 
-        mMap.clear();
+//        mMap.clear();
 
         if(! res.equals("")) {
-            res= res.substring(2, res.length()-2);
+            res= res.substring(1, res.length()-1);
             ArrayList uloc = new ArrayList<String>(Arrays.asList(res.split(",")));
             ArrayList uid = new ArrayList<String>();
             ArrayList loc = new ArrayList<String>();
 
             for (int i = 0; i < uloc.size(); i++) {
-                String u = uloc.get(i).toString().split("L")[0];
-                String l = uloc.get(i).toString().split("L")[1];
-                uid.add(u);
-                loc.add(l);
+                if(i==0) {
+                    String uu = uloc.get(i).toString();
+                    uu = uu.substring(1, uu.length() - 1);
+                    String u = uu.split("L")[0];
+                    String l = uu.split("L")[1];
+                    uid.add(u);
+                    loc.add(l);
+                }
+                else {
+                    String uu = uloc.get(i).toString();
+                    uu = uu.substring(2, uu.length() - 1);
+                    String u = uu.split("L")[0];
+                    String l = uu.split("L")[1];
+                    uid.add(u);
+                    loc.add(l);
+
+                }
+
+
             }
             for (int i = 0; i < uid.size(); i++) {
 

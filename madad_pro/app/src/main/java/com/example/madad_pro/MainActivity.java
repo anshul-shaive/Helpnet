@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     int PERMISSION_ID = 44;
     FusedLocationProviderClient mFusedLocationClient;
-     private String url = "http://192.168.0.5:8000/loc";
+     private String url = "http://172.16.16.243:8000/loc";
 
     int user_id;
 
