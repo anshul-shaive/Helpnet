@@ -24,16 +24,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".help"
-            android:label="@string/title_activity_help" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Otp" />
         <activity android:name=".Register" />
         <activity android:name=".dialog_handler" />
         <activity android:name=".login" />
         <activity android:name=".Option" />
-        <activity android:name=".Helper" />
         <activity android:name=".HelpInfo" />
         <activity android:name=".Requests" />
         <activity android:name=".MapsActivity" />

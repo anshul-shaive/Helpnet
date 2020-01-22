@@ -30,7 +30,7 @@ public class Requests extends AppCompatActivity {
 
     String req_id,req_type,status,username,req_time,location,nprespond,auth_resp="";
     int user_id;
-    private String url = "http://172.16.16.243:8000/update";
+    private String url = "http://172.16.17.245:8000/update";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

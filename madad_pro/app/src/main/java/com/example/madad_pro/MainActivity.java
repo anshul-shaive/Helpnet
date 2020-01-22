@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     int PERMISSION_ID = 44;
     FusedLocationProviderClient mFusedLocationClient;
-     private String url = "http://172.16.16.243:8000/loc";
+     private String url = "http://172.16.17.245:8000/loc";
 
     int user_id;
 
@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
                                 if (location == null) {
                                     requestNewLocationData();
                                 } else {
+                                    requestNewLocationData();
+
                                     ((MyApplication) MainActivity.this.getApplication()).setLat(location.getLatitude());
                                     ((MyApplication) MainActivity.this.getApplication()).setLng(location.getLongitude());
                                 }
@@ -99,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
 
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(0);
-        mLocationRequest.setFastestInterval(0);
-        mLocationRequest.setNumUpdates(1);
+        mLocationRequest.setInterval(100);
+        mLocationRequest.setFastestInterval(100);
+//        mLocationRequest.setNumUpdates(1);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocationClient.requestLocationUpdates(
@@ -160,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         if (checkPermissions()) {
             getLastLocation();
         }
+
 
     }
 

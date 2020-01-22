@@ -1,10 +1,15 @@
 package com.example.madad_pro;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
@@ -20,7 +25,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -39,7 +46,7 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
     private Double Lat=0.0;
     private Double Lng=0.0;
     private String req_id,loc;
-    private String url = "http://172.16.16.243:8000/helpinfo";
+    private String url = "http://172.16.17.245:8000/helpinfo";
     private String res;
 
     SpotsDialog spotsDialog;
@@ -76,7 +83,7 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
 
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
-            sendAndRequestResponse();
+            sendAndRequestResponse2();
         }
     };
 
@@ -88,7 +95,7 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
 
         mMap = googleMap;
 
-//        mMap.clear();
+        mMap.clear();
 
         if(! res.equals("")) {
             res= res.substring(1, res.length()-1);
@@ -124,16 +131,29 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
                 Double Lng = Double.parseDouble(iloc.split(":")[1]);
 
                 LatLng userLocation = new LatLng(Lat, Lng);
-                mMap.addMarker(new MarkerOptions().position(userLocation).title(uid.get(i).toString()));
+                Marker myMarker=mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.person))
+                        .title(uid.get(i).toString()));
+
             }
+
+            LatLng userLocation = new LatLng(Lat, Lng);
+            mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.you))
+                    .title("You"));
+            mMap.getUiSettings().setZoomControlsEnabled(true);
+
+
         }
-        LatLng userLocation = new LatLng(Lat, Lng);
-        mMap.addMarker(new MarkerOptions().position(userLocation).title("You"));
-        mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
+        else {
+            LatLng userLocation = new LatLng(Lat, Lng);
+            mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.you))
+                    .title("You"));
+            mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        spotsDialog.dismiss();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
+
+            spotsDialog.dismiss();
+        }
     }
 
     @Override
@@ -149,6 +169,49 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
 
         RequestQueue queue = Volley.newRequestQueue(HelpInfo.this);
         spotsDialog.show();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("res",response);
+                        res=response;
+                        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                                .findFragmentById(R.id.map3);
+                        mapFragment.getMapAsync(HelpInfo.this::onMapReady);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", String.valueOf(error));
+                    }
+                }
+
+        )
+        {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("req_id","" +req_id);
+                return params;
+            }
+
+        };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
+
+        queue.add(postRequest);
+
+    }
+
+
+    private void sendAndRequestResponse2(){
+
+        RequestQueue queue = Volley.newRequestQueue(HelpInfo.this);
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
