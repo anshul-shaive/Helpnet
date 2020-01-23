@@ -48,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
     int PERMISSION_ID = 44;
     FusedLocationProviderClient mFusedLocationClient;
-     private String url = "http://172.16.17.245:8000/loc";
+    public String url = "https://helpnet-web.herokuapp.com/loc";
+
+//    private String url = "http://192.168.0.5:8000/loc";
 
     int user_id;
 

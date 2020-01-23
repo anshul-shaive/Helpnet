@@ -80,8 +80,9 @@ public class help2 extends FragmentActivity implements OnMapReadyCallback {
 
         autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG));
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//            Place.Field.ID, Place.Field.NAME,
             @Override
             public void onPlaceSelected(Place place) {
 

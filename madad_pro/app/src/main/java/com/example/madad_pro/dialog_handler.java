@@ -30,8 +30,8 @@ import dmax.dialog.SpotsDialog;
 public class dialog_handler extends AppCompatDialogFragment{
 
 
-//       private String url = "https://helpnet-web.herokuapp.com/request";
-    private String url = "http://172.16.17.245:8000/request";
+       private String url = "https://helpnet-web.herokuapp.com/request";
+//    private String url = "http://192.168.0.5:8000/request";
 
 
     private Boolean auth_involved= false;

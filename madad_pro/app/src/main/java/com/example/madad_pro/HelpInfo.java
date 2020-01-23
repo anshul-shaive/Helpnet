@@ -3,6 +3,7 @@ package com.example.madad_pro;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,10 +31,20 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.DirectionsApi;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.DirectionsStep;
+import com.google.maps.model.EncodedPolyline;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,8 +58,13 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
     private Double Lat=0.0;
     private Double Lng=0.0;
     private String req_id,loc;
-    private String url = "http://172.16.17.245:8000/helpinfo";
+    private String url = "https://helpnet-web.herokuapp.com/helpinfo";
+//    private String url = "http://192.168.0.5:8000/helpinfo";
     private String res;
+    DirectionsResult directionsResult;
+    int flag=0;
+    SupportMapFragment mapFragment;
+
 
     SpotsDialog spotsDialog;
     private Timer myTimer;
@@ -59,6 +76,8 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_help_info);
         req_id=getIntent().getStringExtra("req_id");
         loc=getIntent().getStringExtra("loc");
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map3);
 
         Lat=Double.parseDouble(loc.split(":")[0]);
         Lng=Double.parseDouble(loc.split(":")[1]);
@@ -127,17 +146,98 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
             for (int i = 0; i < uid.size(); i++) {
 
                 String iloc = loc.get(i).toString();
-                Double Lat = Double.parseDouble(iloc.split(":")[0]);
-                Double Lng = Double.parseDouble(iloc.split(":")[1]);
+                Double Lathelper = Double.parseDouble(iloc.split(":")[0]);
+                Double Lnghelper = Double.parseDouble(iloc.split(":")[1]);
 
-                LatLng userLocation = new LatLng(Lat, Lng);
-                Marker myMarker=mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.person))
+                LatLng userLocation = new LatLng(Lathelper, Lnghelper);
+                Marker myMarker=mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.helper))
                         .title(uid.get(i).toString()));
+
+
+
+///////////////////////////////////////////////////////
+                if(flag !=0) {
+                    //Define list to get all latlng for the route
+                    List<LatLng> path = new ArrayList();
+
+                    String origLat = Lat.toString();
+                    String origLng = Lng.toString();
+
+                    //Execute Directions API request
+                    GeoApiContext context = new GeoApiContext.Builder()
+                            .apiKey("AIzaSyAZtuMxAlgBL3RGJ43EU5reKUBHnk4Z1Xo")
+                            .build();
+//        DirectionsApiRequest req = DirectionsApi.getDirections(context, "41.385064,2.173403", "40.416775,-3.70379");
+                    DirectionsApiRequest req = DirectionsApi.getDirections(context, origLat + "," + origLng, Lathelper + "," + Lnghelper);
+
+                    try {
+                        directionsResult = req.await();
+
+                        //Loop through legs and steps to get encoded polylines of each step
+                        if (directionsResult.routes != null && directionsResult.routes.length > 0) {
+                            DirectionsRoute route = directionsResult.routes[0];
+
+                            if (route.legs != null) {
+                                for (int l = 0; l < route.legs.length; l++) {
+                                    DirectionsLeg leg = route.legs[l];
+                                    if (leg.steps != null) {
+                                        for (int j = 0; j < leg.steps.length; j++) {
+                                            DirectionsStep step = leg.steps[j];
+                                            if (step.steps != null && step.steps.length > 0) {
+                                                for (int k = 0; k < step.steps.length; k++) {
+                                                    DirectionsStep step1 = step.steps[k];
+                                                    EncodedPolyline points1 = step1.polyline;
+                                                    if (points1 != null) {
+                                                        //Decode polyline and add points to list of route coordinates
+                                                        List<com.google.maps.model.LatLng> coords1 = points1.decodePath();
+                                                        for (com.google.maps.model.LatLng coord1 : coords1) {
+                                                            path.add(new LatLng(coord1.lat, coord1.lng));
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                EncodedPolyline points = step.polyline;
+                                                if (points != null) {
+                                                    //Decode polyline and add points to list of route coordinates
+                                                    List<com.google.maps.model.LatLng> coords = points.decodePath();
+                                                    for (com.google.maps.model.LatLng coord : coords) {
+                                                        path.add(new LatLng(coord.lat, coord.lng));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        Log.e("road_err", ex.getLocalizedMessage());
+                    }
+
+                    //Draw the polyline
+                    if (path.size() > 0) {
+                        PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
+                        mMap.addPolyline(opts);
+                    }
+
+
+                    mMap.getUiSettings().setZoomControlsEnabled(true);
+//                    mMap.addMarker(new MarkerOptions().position(reqLoc).icon(BitmapDescriptorFactory.fromResource(R.drawable.requester)).title("Help required here!")).setSnippet(getEndLocationTitle(res));
+////        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(reqLoc, 14));
+//
+//
+//                    ////////////////////////////////////////
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLng(reqLoc));
+//                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(14);
+//                    mMap.animateCamera(zoom);
+                }
+//////////////////////////////////////////////////////////////
+
 
             }
 
             LatLng userLocation = new LatLng(Lat, Lng);
-            mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.you))
+            mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.requester))
                     .title("You"));
             mMap.getUiSettings().setZoomControlsEnabled(true);
 
@@ -146,7 +246,7 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
 
         else {
             LatLng userLocation = new LatLng(Lat, Lng);
-            mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.you))
+            mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.requester))
                     .title("You"));
             mMap.getUiSettings().setZoomControlsEnabled(true);
 
@@ -175,8 +275,7 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
                     public void onResponse(String response) {
                         Log.d("res",response);
                         res=response;
-                        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                                .findFragmentById(R.id.map3);
+
                         mapFragment.getMapAsync(HelpInfo.this::onMapReady);
                     }
                 },
@@ -218,8 +317,8 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
                     public void onResponse(String response) {
                         Log.d("res",response);
                         res=response;
-                        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                                .findFragmentById(R.id.map3);
+                        flag=1;
+
                         mapFragment.getMapAsync(HelpInfo.this::onMapReady);
                     }
                 },

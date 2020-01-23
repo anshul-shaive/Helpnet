@@ -30,17 +30,21 @@ public class Requests extends AppCompatActivity {
 
     String req_id,req_type,status,username,req_time,location,nprespond,auth_resp="";
     int user_id;
-    private String url = "http://172.16.17.245:8000/update";
+    String jsonstr;
+    public String url = "https://helpnet-web.herokuapp.com/update";
+
+//    private String url = "http://192.168.0.5:8000/update";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requests);
+        jsonstr=getIntent().getStringExtra("json");
 
         try {
 
             Intent intent =getIntent();
-            JSONObject jsonObj = new JSONObject(intent.getStringExtra("json"));
+            JSONObject jsonObj = new JSONObject(jsonstr);
             int pos = intent.getIntExtra("pos",0);
             JSONObject requestObject = new JSONObject(jsonObj.getString("request"+pos));
 
@@ -133,5 +137,14 @@ public class Requests extends AppCompatActivity {
 
         queue.add(postRequest);
 
+    }
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        Intent intent;
+        intent = new Intent(Requests.this, Helper2.class);
+        intent.putExtra("json",jsonstr);
+        startActivity(intent);
+        Requests.this.finish();
     }
 }
