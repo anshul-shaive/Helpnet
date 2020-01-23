@@ -31,15 +31,15 @@ public class dialog_handler extends AppCompatDialogFragment{
 
 
        private String url = "https://helpnet-web.herokuapp.com/request";
-//    private String url = "http://172.16.19.45:8000/request";
+//    private String url = "http://192.168.0.5:8000/request";
 
 
     private Boolean auth_involved= false;
     private String crime;
 
     private String user_id;
-    private Double Lat =0.0;
-    private Double Lng =0.0;
+    private Double pinnedLat =0.0;
+    private Double pinnedLng =0.0;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-dd/MM/yyyy", Locale.getDefault());
 
@@ -57,8 +57,8 @@ public class dialog_handler extends AppCompatDialogFragment{
         Switch auth_toggle = (Switch) view.findViewById(R.id.switch1);
 
         user_id = ((MyApplication) getActivity().getApplication()).getUser_id();
-        Lat = ((MyApplication) getActivity().getApplication()).getLat();
-        Lng = ((MyApplication) getActivity().getApplication()).getLng();
+        pinnedLat = ((MyApplication) getActivity().getApplication()).getPinnedlat();
+        pinnedLng = ((MyApplication) getActivity().getApplication()).getPinnedlng();
 
 
         crime_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -84,8 +84,10 @@ public class dialog_handler extends AppCompatDialogFragment{
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),help.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getContext(),help2.class);
+//                startActivity(intent);
+//                getActivity().finish();
+                dismiss();
             }
         });
 
@@ -93,6 +95,7 @@ public class dialog_handler extends AppCompatDialogFragment{
             @Override
             public void onClick(View v) {
                 sendAndRequestResponse();
+
             }
         });
 
@@ -111,8 +114,11 @@ public class dialog_handler extends AppCompatDialogFragment{
                     public void onResponse(String response) {
                         spotsDialog.dismiss();
                         Intent intent = new Intent(getContext(),HelpInfo.class);
-                        startActivity(intent);
+                        intent.putExtra("req_id",response);
+                        intent.putExtra("loc",""+pinnedLat+":"+pinnedLng);
 
+                        startActivity(intent);
+                        getActivity().finish();
                     }
                 },
                 new Response.ErrorListener() {
@@ -135,8 +141,8 @@ public class dialog_handler extends AppCompatDialogFragment{
                 params.put("username","");
                 params.put("user_id",""+user_id);
                 params.put("req_time",""+currentDateandTime);
-                params.put("nprespond","");
-                params.put("location",""+Lat+":"+Lng);
+                params.put("nprespond","0");
+                params.put("location",""+pinnedLat+":"+pinnedLng);
                 params.put("presponded_ids","");
                 params.put("passigned_ids","");
 

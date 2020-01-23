@@ -34,7 +34,7 @@ public class login extends AppCompatActivity {
  RequestQueue queue;
 
 public String url = "https://helpnet-web.herokuapp.com/login";
-//public String url = "http://172.16.19.45:8000/login";
+//public String url = "http://192.168.0.5:8000/login";
 
 
     EditText editusername;
@@ -48,8 +48,8 @@ public String url = "https://helpnet-web.herokuapp.com/login";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        editusername = (EditText) findViewById(R.id.edit_username);
-        editpassword = (EditText) findViewById(R.id.edit_password);
+        editusername = (EditText) findViewById(R.id.loginusernameEt);
+        editpassword = (EditText) findViewById(R.id.loginpassEt);
     }
 
     public void signin(View view)

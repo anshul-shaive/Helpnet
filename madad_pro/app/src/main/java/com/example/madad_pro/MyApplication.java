@@ -8,6 +8,8 @@ public class MyApplication extends Application {
     String user_id;
     Double lat;
     Double lng;
+    Double pinnedlat;
+    Double pinnedlng;
 
     public void setStatus(String someVariable) {
         this.token= someVariable;
@@ -25,6 +27,14 @@ public class MyApplication extends Application {
         this.lng = someVariable;
     }
 
+    public void setPinnedlat(Double someVariable) {
+        this.pinnedlat = someVariable;
+    }
+
+    public void setPinnedlng(Double someVariable) {
+        this.pinnedlng = someVariable;
+    }
+
     public String getStatus() {
         return token;
     }
@@ -39,6 +49,14 @@ public class MyApplication extends Application {
 
     public Double getLng() {
         return lng;
+    }
+
+    public Double getPinnedlat() {
+        return pinnedlat;
+    }
+
+    public Double getPinnedlng() {
+        return pinnedlng;
     }
 
 

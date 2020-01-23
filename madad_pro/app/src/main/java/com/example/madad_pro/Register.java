@@ -39,7 +39,7 @@ public class Register extends AppCompatActivity {
     RequestQueue queue;
 
 public String url = "https://helpnet-web.herokuapp.com";
-//public String url = "http://172.16.19.45:8000/";
+//public String url = "http://192.168.0.5:8000/";
 
 
 
@@ -48,11 +48,11 @@ public String url = "https://helpnet-web.herokuapp.com";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        editfullname=(EditText)findViewById(R.id.textView1);
-        editaadhar=(EditText)findViewById(R.id.edit_username);
-        editmob_no=(EditText)findViewById(R.id.textView3);
-        editpassword=(EditText)findViewById(R.id.edit_password);
-        editconf_password=(EditText)findViewById(R.id.textView5);
+        editfullname=(EditText)findViewById(R.id.fullnameTv);
+        editaadhar=(EditText)findViewById(R.id.aadharTv);
+        editmob_no=(EditText)findViewById(R.id.mobileTv);
+        editpassword=(EditText)findViewById(R.id.edit_passwordTv);
+        editconf_password=(EditText)findViewById(R.id.confirmTv);
 
 
     }
