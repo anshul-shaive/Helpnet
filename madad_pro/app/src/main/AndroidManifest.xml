@@ -16,7 +16,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Helper2"></activity>
+        <activity
+            android:name=".General"
+            android:label="@string/title_activity_general"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Nav_Main"
+            android:label="@string/title_activity_nav__main"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Helper2" />
         <activity android:name=".help2" />
         <activity android:name=".LocActivity" />
 

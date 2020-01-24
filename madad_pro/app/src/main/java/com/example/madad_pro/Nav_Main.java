@@ -9,22 +9,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -34,6 +24,34 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import android.os.Looper;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.app.ActivityCompat;
+import androidx.customview.widget.ViewDragHelper;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.view.Menu;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,28 +61,99 @@ import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
 
+public class Nav_Main extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
-
+    private AppBarConfiguration mAppBarConfiguration;
+    private ActionBarDrawerToggle mDrawerToggle;
     int PERMISSION_ID = 44;
     FusedLocationProviderClient mFusedLocationClient;
-    public String url = "https://helpnet-web.herokuapp.com/loc";
-
-//    private String url = "http://192.168.0.5:8000/loc";
+    private String url = "http://172.16.16.243:8000/loc";
+    ViewDragHelper viewDragHelper;
 
     int user_id;
 
-     Double Lat, Lng;
+    Double Lat, Lng;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_nav__main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
+                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
+                .setDrawerLayout(drawer)
+                .build();
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_history_black_24dp);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+        //Checking the saved data from shared prefrences
         SharedPreferences prefs = getSharedPreferences("token_sp", MODE_PRIVATE);
         user_id = prefs.getInt("user_id", 0);
+    }
 
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.nav_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+//        if (mDrawerToggle.onOptionsItemSelected(item)) {
+//            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+//            return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+//                    || super.onSupportNavigateUp();
+//        }
+
+        if(id == R.id.logout)
+        {
+            SharedPreferences.Editor editor = getSharedPreferences("token_sp", MODE_PRIVATE).edit();
+            editor.putString("token", "");
+            editor.putInt("user_id", 0);
+            editor.apply();
+
+            ((MyApplication) Nav_Main.this.getApplication()).setUser_id("");
+            ((MyApplication) Nav_Main.this.getApplication()).setStatus("");
+
+            Intent intent = new Intent(Nav_Main.this,Option.class);
+            startActivity(intent);
+            Nav_Main.this.finish();
+        }
+        return true;
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 
     @SuppressLint("MissingPermission")
@@ -80,9 +169,8 @@ public class MainActivity extends AppCompatActivity {
                                     requestNewLocationData();
                                 } else {
                                     requestNewLocationData();
-
-                                    ((MyApplication) MainActivity.this.getApplication()).setLat(location.getLatitude());
-                                    ((MyApplication) MainActivity.this.getApplication()).setLng(location.getLongitude());
+                                    ((MyApplication) Nav_Main.this.getApplication()).setLat(location.getLatitude());
+                                    ((MyApplication) Nav_Main.this.getApplication()).setLng(location.getLongitude());
                                 }
                             }
                         }
@@ -103,9 +191,9 @@ public class MainActivity extends AppCompatActivity {
 
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(100);
-        mLocationRequest.setFastestInterval(100);
-//        mLocationRequest.setNumUpdates(1);
+        mLocationRequest.setInterval(0);
+        mLocationRequest.setFastestInterval(0);
+        mLocationRequest.setNumUpdates(1);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocationClient.requestLocationUpdates(
@@ -120,8 +208,8 @@ public class MainActivity extends AppCompatActivity {
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
 
-            ((MyApplication) MainActivity.this.getApplication()).setLat(mLastLocation.getLatitude());
-            ((MyApplication) MainActivity.this.getApplication()).setLng(mLastLocation.getLongitude());
+            ((MyApplication) Nav_Main.this.getApplication()).setLat(mLastLocation.getLatitude());
+            ((MyApplication) Nav_Main.this.getApplication()).setLng(mLastLocation.getLongitude());
         }
     };
 
@@ -165,28 +253,6 @@ public class MainActivity extends AppCompatActivity {
             getLastLocation();
         }
 
-
-    }
-
-    public void emergency(View view)
-    {
-        Intent intent = new Intent(MainActivity.this,help2.class);
-        startActivity(intent);
-        MainActivity.this.finish();
-    }
-
-    public void general(View view)
-    {
-        Intent intent = new Intent(MainActivity.this,Nav_Main.class);
-        startActivity(intent);
-        MainActivity.this.finish();
-    }
-
-
-    public void helpOthers(View view)
-    {
-        sendAndRequestResponse();
-
     }
 
     public void logout(View view)
@@ -197,13 +263,24 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("user_id", 0);
         editor.apply();
 
-        ((MyApplication) MainActivity.this.getApplication()).setUser_id("");
-        ((MyApplication) MainActivity.this.getApplication()).setStatus("");
+        ((MyApplication) Nav_Main.this.getApplication()).setUser_id("");
+        ((MyApplication) Nav_Main.this.getApplication()).setStatus("");
 
-        Intent intent = new Intent(MainActivity.this,Option.class);
+        Intent intent = new Intent(Nav_Main.this,Option.class);
         startActivity(intent);
-        MainActivity.this.finish();
+        Nav_Main.this.finish();
     }
+
+
+    public void onDrawerSlide(View drawerView, float slideOffset){
+        if(slideOffset > .5){
+            mDrawerToggle.onDrawerOpened(drawerView);
+        } else {
+            mDrawerToggle.onDrawerClosed(drawerView);
+        }
+    }
+
+
 
     public void onBackPressed()
     {
@@ -213,13 +290,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendAndRequestResponse(){
 
-        final SpotsDialog spotsDialog = new SpotsDialog(MainActivity.this);
+        final SpotsDialog spotsDialog = new SpotsDialog(Nav_Main.this);
         spotsDialog.show();
 
-        Lat = ((MyApplication) MainActivity.this.getApplication()).getLat();
-        Lng = ((MyApplication) MainActivity.this.getApplication()).getLng();
+        Lat = ((MyApplication) Nav_Main.this.getApplication()).getLat();
+        Lng = ((MyApplication) Nav_Main.this.getApplication()).getLng();
 
-        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(Nav_Main.this);
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -237,10 +314,10 @@ public class MainActivity extends AppCompatActivity {
 
                         spotsDialog.dismiss();
 
-                        Intent intent = new Intent(MainActivity.this,Helper2.class);
+                        Intent intent = new Intent(Nav_Main.this,Helper2.class);
                         intent.putExtra("json",jObject.toString());
                         startActivity(intent);
-                        MainActivity.this.finish();
+                        Nav_Main.this.finish();
 
                     }
                 },
@@ -253,6 +330,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
         )
+
+
 
 
         {
@@ -276,6 +355,25 @@ public class MainActivity extends AppCompatActivity {
         queue.add(postRequest);
 
     }
+
+    public void emergency(View view)
+    {
+        Intent intent = new Intent(Nav_Main.this,help2.class);
+        startActivity(intent);
+        Nav_Main.this.finish();
+    }
+
+    public void helpOthers(View view)
+    {
+        sendAndRequestResponse();
+
+    }
+    public  void general(View view)
+    {
+        Intent intent =  new Intent(Nav_Main.this,General.class);
+        startActivity(intent);
+        Nav_Main.this.finish();
+    }
+
+
 }
-
-
