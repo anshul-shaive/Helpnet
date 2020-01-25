@@ -3,6 +3,7 @@ package com.example.madad_pro;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -66,7 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private String TAG = "so47492459";
     Double Lat, Lng;
-    String req_location;
+    String req_location,req_id;
     String[] reqloc;
     String req_lat;
     String req_lng;
@@ -79,8 +81,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     SupportMapFragment mapFragment;
     int flag=0;
     Marker helpermarker;
-    String jsonstr;
-    public String url = "https://helpnet-web.herokuapp.com/loc";
+
+    public String url = "https://helpnet-web.herokuapp.com/location_update_for_request";
+    public String url2 = "https://helpnet-web.herokuapp.com/update";
 
 //    private String url = "http://192.168.0.5:8000/loc";
 
@@ -96,7 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SharedPreferences prefs = getSharedPreferences("token_sp", MODE_PRIVATE);
         user_id = prefs.getInt("user_id", 0);
 
-
+        req_id = getIntent().getStringExtra("req_id");
         req_location = getIntent().getStringExtra("req_location");
         reqloc = req_location.split(":");
         req_lat = reqloc[0];
@@ -106,11 +109,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map2);
         mapFragment.getMapAsync(this);
 
-        Button request = findViewById(R.id.Navigate);
-        request.setOnClickListener(new View.OnClickListener() {
+        Button Gnavigation = findViewById(R.id.Navigate);
+        Gnavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {loadNavigationView(req_lat,req_lng);
+            }
+        });
+
+        Button cancel_helper = findViewById(R.id.cancel_helper);
+        cancel_helper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadNavigationView(req_lat, req_lng);
+            onhelpercancel();
             }
         });
 
@@ -349,10 +359,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     public void onResponse(String response) {
                         Log.d("res",response);
 //                        res=response;
+                        if(response.equals("request_cancelled")){
+                            new AlertDialog.Builder(MapsActivity.this)
+                                    .setTitle("Request Cancelled")
+                                    .setMessage("We apologise but the request was cancelled")
+
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Continue with delete operation
+                                            Intent intent;
+                                            intent = new Intent(MapsActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                            MapsActivity.this.finish();
+
+                                        }
+                                    })
+
+                                    // A null listener allows the button to dismiss the dialog and take no further action.
+                                    .setNegativeButton(android.R.string.no, null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        }
+                        else {
                         flag=1;
                         helpermarker.remove();
 
                         mapFragment.getMapAsync(MapsActivity.this::onMapReady);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -370,6 +403,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Map<String, String> params = new HashMap<String, String>();
                 Lat = ((MyApplication) MapsActivity.this.getApplication()).getLat();
                 Lng = ((MyApplication) MapsActivity.this.getApplication()).getLng();
+                params.put("req_id","" +req_id);
                 params.put("user_id","" +user_id);
                 params.put("last_loc",""+Lat+":"+Lng);
                 return params;
@@ -385,10 +419,75 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         queue.add(postRequest);
 
     }
+
+
+    private void sendAndRequestResponse2(){
+
+        RequestQueue queue = Volley.newRequestQueue(MapsActivity.this);
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Intent intent;
+                        intent = new Intent(MapsActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        MapsActivity.this.finish();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", String.valueOf(error));
+                    }
+                }
+
+        )
+        {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("user_id","" +user_id);
+                params.put("req_id","" +req_id);
+                params.put("status","cancel");
+                return params;
+            }
+
+        };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
+
+        queue.add(postRequest);
+
+    }
+
+
+
     public void onBackPressed()
     {
-        super.onBackPressed();
-        MapsActivity.this.finish();
+        onhelpercancel();
+//        super.onBackPressed();
+    }
+
+    public void onhelpercancel(){
+        new AlertDialog.Builder(MapsActivity.this)
+                .setTitle("Are You Sure you want to cancel?")
+                .setMessage("You'll be fined for this")
+
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendAndRequestResponse2();
+                    }
+                })
+
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
 }

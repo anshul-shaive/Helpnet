@@ -1,6 +1,7 @@
 package com.example.madad_pro;
 
 import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.graphics.Color;
@@ -9,10 +10,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -63,6 +68,7 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
     private String res;
     DirectionsResult directionsResult;
     int flag=0;
+    String status="active";
     SupportMapFragment mapFragment;
 
 
@@ -83,6 +89,14 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
         Lng=Double.parseDouble(loc.split(":")[1]);
         spotsDialog = new SpotsDialog(HelpInfo.this);
         sendAndRequestResponse();
+
+        Button Cancel = findViewById(R.id.cancel_help);
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onhelpcancel();
+            }
+        });
 
         myTimer = new Timer();
         myTimer.schedule(new TimerTask() {
@@ -258,9 +272,9 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Intent i = new Intent(HelpInfo.this,help2.class);
-        startActivity(i);
+        Intent intent;
+        intent = new Intent(HelpInfo.this, MainActivity.class);
+        startActivity(intent);
         HelpInfo.this.finish();
     }
 
@@ -273,10 +287,20 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("res",response);
-                        res=response;
+                        if(response.equals("cancelled")){
+                            spotsDialog.dismiss();
+                            Toast.makeText(HelpInfo.this, "Request Cancelled" , Toast.LENGTH_LONG).show();
+                            Intent intent;
+                            intent = new Intent(HelpInfo.this, MainActivity.class);
+                            startActivity(intent);
+                            HelpInfo.this.finish();
+                        }
+                        else {
+//                        Log.d("res",response);
+                            res = response;
 
-                        mapFragment.getMapAsync(HelpInfo.this::onMapReady);
+                            mapFragment.getMapAsync(HelpInfo.this::onMapReady);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -293,6 +317,8 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("req_id","" +req_id);
+                params.put("status","" +status);
+
                 return params;
             }
 
@@ -315,11 +341,13 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("res",response);
-                        res=response;
-                        flag=1;
+                        if(status.equals("active")) {
+                            Log.d("res", response);
+                            res = response;
+                            flag = 1;
 
-                        mapFragment.getMapAsync(HelpInfo.this::onMapReady);
+                            mapFragment.getMapAsync(HelpInfo.this::onMapReady);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -336,6 +364,7 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("req_id","" +req_id);
+                params.put("status","active");
                 return params;
             }
 
@@ -348,6 +377,27 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
 
         queue.add(postRequest);
 
+    }
+
+    public void onhelpcancel(){
+        status="cancelled";
+        new AlertDialog.Builder(HelpInfo.this)
+                .setTitle("Are You Sure you want to cancel?")
+                .setMessage("You'll be fined for this")
+
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendAndRequestResponse();
+                    }
+                })
+
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        status="active";
+                    }
+                })
+                .setIcon(R.drawable.risk)
+                .show();
     }
 }
 

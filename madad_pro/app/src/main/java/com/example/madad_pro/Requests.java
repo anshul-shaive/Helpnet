@@ -103,7 +103,9 @@ public class Requests extends AppCompatActivity {
                         spotsDialog.dismiss();
                         Intent intent = new Intent(Requests.this, MapsActivity.class);
                         intent.putExtra("req_location",location);
+                        intent.putExtra("req_id",req_id);
                         startActivity(intent);
+                        Requests.this.finish();
 
                     }
                 },
@@ -125,6 +127,8 @@ public class Requests extends AppCompatActivity {
 
                 params.put("user_id","" +user_id);
                 params.put("req_id","" +req_id);
+                params.put("status","responding");
+
                 return params;
             }
 
