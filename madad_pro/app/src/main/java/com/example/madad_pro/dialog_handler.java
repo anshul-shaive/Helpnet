@@ -43,7 +43,7 @@ public class dialog_handler extends AppCompatDialogFragment{
 
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-dd/MM/yyyy", Locale.getDefault());
 
-    private String currentDateandTime = sdf.format(new Date());
+    private String currentDateandTime;
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -140,6 +140,7 @@ public class dialog_handler extends AppCompatDialogFragment{
                 params.put("status","active");
                 params.put("username","");
                 params.put("user_id",""+user_id);
+                currentDateandTime = sdf.format(new Date());
                 params.put("req_time",""+currentDateandTime);
                 params.put("nprespond","0");
                 params.put("location",""+pinnedLat+":"+pinnedLng);

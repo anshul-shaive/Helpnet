@@ -6,22 +6,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import dmax.dialog.SpotsDialog;
 
-//import com.google.android.gms.common.api.Response;
 
 public class Register extends AppCompatActivity {
     private EditText editfullname;
@@ -93,9 +88,6 @@ public String url = "https://helpnet-web.herokuapp.com";
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // response
-//                        Log.d("Response", response);
-//
                         spotsDialog.dismiss();
 
                         if(response.equals("Registered")) {
@@ -134,6 +126,9 @@ public String url = "https://helpnet-web.herokuapp.com";
 
         if(conf_password.equals(password)) {
             queue.add(postRequest);
+        }
+        else {
+            Toast.makeText(Register.this, "Password doesn't match", Toast.LENGTH_LONG).show();
         }
     }
 
