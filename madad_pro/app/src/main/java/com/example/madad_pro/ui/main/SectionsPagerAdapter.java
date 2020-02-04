@@ -12,6 +12,9 @@ import com.example.madad_pro.Frag_GetHelp;
 import com.example.madad_pro.Frag_HelpOthers;
 import com.example.madad_pro.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
@@ -33,6 +36,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
        switch (position)
        {
            case 0:
+
                fragment = new Frag_GetHelp();
                break;
            case 1:

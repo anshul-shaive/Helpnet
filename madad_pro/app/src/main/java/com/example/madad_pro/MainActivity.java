@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void general(View view)
     {
-        Intent intent = new Intent(MainActivity.this,Nav_Main.class);
+        Intent intent = new Intent(MainActivity.this,Faq_main.class);
         startActivity(intent);
         MainActivity.this.finish();
     }

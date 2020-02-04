@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -76,8 +77,8 @@ public class dialog_handler_general extends AppCompatDialogFragment {
           cash = edit_cash.getText().toString();
           persons = edit_cash.getText().toString();
 
-          i_person = Integer.parseInt(persons);
-          i_cash = Integer.parseInt(cash);
+          //i_person = Integer.parseInt(persons);
+          //i_cash = Integer.parseInt(cash);
 
         TextView cancel = view.findViewById(R.id.cancel);
         TextView confirm = view.findViewById(R.id.confirm);
@@ -96,6 +97,7 @@ public class dialog_handler_general extends AppCompatDialogFragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Toast.makeText(this,""+description+persons+cash,Toast.LENGTH_SHORT).show();
                 sendAndRequestResponse();
 
             }

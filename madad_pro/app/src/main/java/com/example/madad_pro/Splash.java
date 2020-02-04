@@ -41,10 +41,10 @@ public class Splash extends Activity {
                 Intent mainIntent;
 
                 if(token.equals("verified")) {
-                     mainIntent = new Intent(Splash.this, Nav_Main.class);
+                     mainIntent = new Intent(Splash.this, Faq_main.class);
                 }
                 else {
-                     mainIntent = new Intent(Splash.this, Nav_Main.class);
+                     mainIntent = new Intent(Splash.this, Faq_main.class);
                 }
 
                 Splash.this.startActivity(mainIntent);

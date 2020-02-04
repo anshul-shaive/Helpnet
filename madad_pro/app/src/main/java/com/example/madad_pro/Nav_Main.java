@@ -67,7 +67,7 @@ public class Nav_Main extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     int PERMISSION_ID = 44;
     FusedLocationProviderClient mFusedLocationClient;
-    private String url = "http://172.16.16.243:8000/loc";
+    private String url = "https://helpnet-web.herokuapp.com/loc";
     ViewDragHelper viewDragHelper;
 
     int user_id;
@@ -285,76 +285,79 @@ public class Nav_Main extends AppCompatActivity {
     public void onBackPressed()
     {
         super.onBackPressed();
-//        MainActivity.this.finish();
+        startActivity(new Intent(Nav_Main.this,MainActivity.class));
+        Nav_Main.this.finish();
     }
 
-    private void sendAndRequestResponse(){
-
-        final SpotsDialog spotsDialog = new SpotsDialog(Nav_Main.this);
-        spotsDialog.show();
-
-        Lat = ((MyApplication) Nav_Main.this.getApplication()).getLat();
-        Lng = ((MyApplication) Nav_Main.this.getApplication()).getLng();
-
-        RequestQueue queue = Volley.newRequestQueue(Nav_Main.this);
-
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        JSONObject jObject=new JSONObject();
-
-                        try {
-                            jObject = new JSONObject(response);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        spotsDialog.dismiss();
-
-                        Intent intent = new Intent(Nav_Main.this,Helper2.class);
-                        intent.putExtra("json",jObject.toString());
-                        startActivity(intent);
-                        Nav_Main.this.finish();
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", String.valueOf(error));
-                    }
-                }
-
-        )
-
-
+//    private void sendAndRequestResponse(){
+//
+//        final SpotsDialog spotsDialog = new SpotsDialog(Nav_Main.this);
+//        spotsDialog.show();
+//
+//        Lat = ((MyApplication) Nav_Main.this.getApplication()).getLat();
+//        Lng = ((MyApplication) Nav_Main.this.getApplication()).getLng();
+//
+//        RequestQueue queue = Volley.newRequestQueue(Nav_Main.this);
+//
+//        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                        JSONObject jObject=new JSONObject();
+//
+//                        try {
+//                            jObject = new JSONObject(response);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        spotsDialog.dismiss();
+//
+//                        Intent intent = new Intent(Nav_Main.this,General.class);
+//                        intent.putExtra("json",jObject.toString());
+//                        startActivity(intent);
+//                        Nav_Main.this.finish();
+//
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // error
+//                        Log.d("Error.Response", String.valueOf(error));
+//                    }
+//                }
+//
+//        )
 
 
-        {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
 
-                params.put("user_id","" +user_id);
-                params.put("last_loc",""+Lat+":"+Lng);
 
-                return params;
-            }
 
-        };
-        postRequest.setRetryPolicy(new DefaultRetryPolicy(
-                0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-        );
-
-        queue.add(postRequest);
-
-    }
+//
+//        {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//
+//                params.put("user_id","" +user_id);
+//                params.put("last_loc",""+Lat+":"+Lng);
+//
+//                return params;
+//            }
+//
+//        };
+//        postRequest.setRetryPolicy(new DefaultRetryPolicy(
+//                0,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+//        );
+//
+//        queue.add(postRequest);
+//
+//    }
 
     public void emergency(View view)
     {
@@ -363,15 +366,15 @@ public class Nav_Main extends AppCompatActivity {
         Nav_Main.this.finish();
     }
 
-    public void helpOthers(View view)
-    {
-        sendAndRequestResponse();
-
-    }
+//    public void helpOthers(View view)
+//    {
+//        sendAndRequestResponse();
+//
+//    }
     public  void general(View view)
     {
-        Intent intent =  new Intent(Nav_Main.this,General.class);
-        startActivity(intent);
+
+        startActivity(new Intent(Nav_Main.this,General.class));
         Nav_Main.this.finish();
     }
 

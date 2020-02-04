@@ -33,6 +33,7 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".MainActivity" />
+        <activity android:name=".Faq_main"/>
         <activity android:name=".Otp" />
         <activity android:name=".Register" />
         <activity android:name=".dialog_handler" />
