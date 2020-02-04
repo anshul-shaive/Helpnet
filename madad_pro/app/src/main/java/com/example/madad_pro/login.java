@@ -88,12 +88,8 @@ public String url = "https://helpnet-web.herokuapp.com/login";
                         System.out.println(response);
 
                         if (response.equals("Wrong Password")) {
-                            Intent intent;
                             spotsDialog.dismiss();
                             Toast.makeText(login.this, "Wrong Password", Toast.LENGTH_LONG).show();
-                            intent = new Intent(login.this, login.class);
-                            startActivity(intent);
-                            login.this.finish();
 
                         }
                         else {
@@ -141,7 +137,7 @@ public String url = "https://helpnet-web.herokuapp.com/login";
                         spotsDialog.dismiss();
                         Intent intent;
                         intent = new Intent(login.this, Option.class);
-                        Toast.makeText(login.this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                        Toast.makeText(login.this, "Please try again if registered or Sign Up", Toast.LENGTH_LONG).show();
                         startActivity(intent);
                         login.this.finish();
                     }

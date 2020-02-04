@@ -35,6 +35,7 @@
         android:textSize="18sp"
         tools:checked="false" />
 
+
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
