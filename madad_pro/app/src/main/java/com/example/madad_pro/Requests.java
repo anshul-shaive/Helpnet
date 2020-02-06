@@ -128,6 +128,12 @@ public class Requests extends AppCompatActivity {
                         Intent intent = new Intent(Requests.this, MapsActivity.class);
                         intent.putExtra("req_location",location);
                         intent.putExtra("req_id",req_id);
+
+                        SharedPreferences.Editor editor = getSharedPreferences("token_sp", MODE_PRIVATE).edit();
+                        editor.putString("req_location",location);
+                        editor.putString("req_id", req_id);
+                        editor.apply();
+
                         startActivity(intent);
                         Requests.this.finish();
 

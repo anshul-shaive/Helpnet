@@ -1,18 +1,14 @@
 package com.example.madad_pro;
 
-import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -27,7 +23,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -67,10 +62,10 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
 //    private String url = "http://192.168.0.5:8000/helpinfo";
     private String res;
     DirectionsResult directionsResult;
-    int flag=0;
+    int flag=0,resume=0;
     String status="active";
     SupportMapFragment mapFragment;
-
+    SharedPreferences.Editor editor;
 
     SpotsDialog spotsDialog;
     private Timer myTimer;
@@ -78,15 +73,25 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_help_info);
         req_id=getIntent().getStringExtra("req_id");
         loc=getIntent().getStringExtra("loc");
+        flag=getIntent().getIntExtra("flag",0);
+        resume=getIntent().getIntExtra("resume",0);
+
+
+        Log.d("helpinfo: req_id",req_id+" "+ loc);
+        editor = getSharedPreferences("token_sp", MODE_PRIVATE).edit();
+        editor.putString("req_id", req_id);
+        editor.putString("loc", loc);
+        editor.apply();
+
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map3);
 
         Lat=Double.parseDouble(loc.split(":")[0]);
         Lng=Double.parseDouble(loc.split(":")[1]);
+
         spotsDialog = new SpotsDialog(HelpInfo.this);
         sendAndRequestResponse();
 
@@ -95,6 +100,14 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 onhelpcancel();
+            }
+        });
+
+        Button Resolved = findViewById(R.id.resolved_help);
+        Resolved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onhelpresolved();
             }
         });
 
@@ -130,7 +143,19 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
 
         mMap.clear();
 
+        LatLng userLocation = new LatLng(Lat, Lng);
+        mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.requester))
+                .title("You"));
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        if(resume==1) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
+            resume=0;
+        }
+        spotsDialog.dismiss();
+
         if(! res.equals("")) {
+
             res= res.substring(1, res.length()-1);
             ArrayList uloc = new ArrayList<String>(Arrays.asList(res.split(",")));
             ArrayList uid = new ArrayList<String>();
@@ -163,13 +188,11 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
                 Double Lathelper = Double.parseDouble(iloc.split(":")[0]);
                 Double Lnghelper = Double.parseDouble(iloc.split(":")[1]);
 
-                LatLng userLocation = new LatLng(Lathelper, Lnghelper);
-                Marker myMarker=mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.helper))
+                LatLng helperLocation = new LatLng(Lathelper, Lnghelper);
+                Marker myMarker=mMap.addMarker(new MarkerOptions().position(helperLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.helper))
                         .title(uid.get(i).toString()));
 
 
-
-///////////////////////////////////////////////////////
                 if(flag !=0) {
                     //Define list to get all latlng for the route
                     List<LatLng> path = new ArrayList();
@@ -181,7 +204,7 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
                     GeoApiContext context = new GeoApiContext.Builder()
                             .apiKey("AIzaSyAZtuMxAlgBL3RGJ43EU5reKUBHnk4Z1Xo")
                             .build();
-//        DirectionsApiRequest req = DirectionsApi.getDirections(context, "41.385064,2.173403", "40.416775,-3.70379");
+
                     DirectionsApiRequest req = DirectionsApi.getDirections(context, origLat + "," + origLng, Lathelper + "," + Lnghelper);
 
                     try {
@@ -234,39 +257,14 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
                         mMap.addPolyline(opts);
                     }
 
-
-                    mMap.getUiSettings().setZoomControlsEnabled(true);
-//                    mMap.addMarker(new MarkerOptions().position(reqLoc).icon(BitmapDescriptorFactory.fromResource(R.drawable.requester)).title("Help required here!")).setSnippet(getEndLocationTitle(res));
-////        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(reqLoc, 14));
-//
-//
-//                    ////////////////////////////////////////
-//                    mMap.moveCamera(CameraUpdateFactory.newLatLng(reqLoc));
-//                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(14);
-//                    mMap.animateCamera(zoom);
                 }
-//////////////////////////////////////////////////////////////
-
 
             }
-
-            LatLng userLocation = new LatLng(Lat, Lng);
-            mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.requester))
-                    .title("You"));
-            mMap.getUiSettings().setZoomControlsEnabled(true);
-
 
         }
 
         else {
-            LatLng userLocation = new LatLng(Lat, Lng);
-            mMap.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.requester))
-                    .title("You"));
-            mMap.getUiSettings().setZoomControlsEnabled(true);
-
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16));
-
-            spotsDialog.dismiss();
         }
     }
 
@@ -287,14 +285,21 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.equals("cancelled")){
+                        if(response.equals("cancelled") || response.equals("resolved")){
                             spotsDialog.dismiss();
-                            Toast.makeText(HelpInfo.this, "Request Cancelled" , Toast.LENGTH_LONG).show();
+                            if(status.equals("resolved")){
+                                Toast.makeText(HelpInfo.this, "Request Resolved" , Toast.LENGTH_LONG).show();
+
+                            }else {
+                                Toast.makeText(HelpInfo.this, "Request Cancelled" , Toast.LENGTH_LONG).show();
+
+                            }
                             Intent intent;
                             intent = new Intent(HelpInfo.this, MainActivity.class);
                             startActivity(intent);
                             HelpInfo.this.finish();
                         }
+
                         else {
 //                        Log.d("res",response);
                             res = response;
@@ -387,7 +392,11 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
 
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        editor.putString("loc","");
+                        editor.putString("req_id","");
+                        editor.apply();
                         sendAndRequestResponse();
+
                     }
                 })
 
@@ -399,6 +408,32 @@ public class HelpInfo extends FragmentActivity implements OnMapReadyCallback {
                 .setIcon(R.drawable.risk)
                 .show();
     }
+
+    public void onhelpresolved(){
+        status="resolved";
+        new AlertDialog.Builder(HelpInfo.this)
+                .setTitle("Are You Sure your request is resolved?")
+                .setMessage("We won't show it anymore.")
+
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        editor.putString("loc","");
+                        editor.putString("req_id","");
+                        editor.apply();
+                        sendAndRequestResponse();
+
+                    }
+                })
+
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        status="active";
+                    }
+                })
+                .setIcon(R.drawable.risk)
+                .show();
+    }
+
 }
 
 

@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Helper2"></activity>
+        <activity android:name=".Helper2" />
         <activity android:name=".help2" />
         <activity android:name=".LocActivity" />
 

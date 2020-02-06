@@ -60,7 +60,7 @@ public class Helper2 extends AppCompatActivity implements MyRecyclerViewAdapter.
         intent.putExtra("json",json);
         intent.putExtra("pos",position+1);
         startActivity(intent);
-//        Helper2.this.finish();
+        Helper2.this.finish();
 
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }

@@ -36,13 +36,27 @@
 
     <Button
         android:id="@+id/cancel_help"
-        android:layout_width="300dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="648dp"
-        android:layout_marginEnd="1dp"
+        android:layout_marginEnd="245dp"
         android:layout_marginBottom="35dp"
         android:text="Cancel Request"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/resolved_help"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="229dp"
+        android:layout_marginTop="648dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="35dp"
+        android:text="Resolved"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

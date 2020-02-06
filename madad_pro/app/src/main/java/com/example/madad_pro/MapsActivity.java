@@ -101,6 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         req_id = getIntent().getStringExtra("req_id");
         req_location = getIntent().getStringExtra("req_location");
+
         reqloc = req_location.split(":");
         req_lat = reqloc[0];
         req_lng = reqloc[1];
@@ -380,6 +381,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                         }
+
+                        if(response.equals("request_resolved")){
+                            new AlertDialog.Builder(MapsActivity.this)
+                                    .setTitle("Request Resolved")
+                                    .setMessage("Thank you for your efforts to make our city safe.")
+
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Continue with delete operation
+                                            Intent intent;
+                                            intent = new Intent(MapsActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                            MapsActivity.this.finish();
+
+                                        }
+                                    })
+
+                                    // A null listener allows the button to dismiss the dialog and take no further action.
+                                    .setNegativeButton(android.R.string.no, null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        }
+
                         else {
                         flag=1;
                         helpermarker.remove();
@@ -481,6 +505,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences.Editor editor = getSharedPreferences("token_sp", MODE_PRIVATE).edit();
+                        editor.putString("req_location","");
+                        editor.putString("req_id", "");
+                        editor.apply();
                         sendAndRequestResponse2();
                     }
                 })

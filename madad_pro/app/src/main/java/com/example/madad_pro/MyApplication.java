@@ -1,16 +1,19 @@
 package com.example.madad_pro;
 
 import android.app.Application;
-import android.app.DatePickerDialog;
 
 public class MyApplication extends Application {
 
     String token;
     String user_id;
+    String Role;
+    String req_id="";
+    String req_location;
     Double lat;
     Double lng;
     Double pinnedlat;
     Double pinnedlng;
+
 
     public void setStatus(String someVariable) {
         this.token= someVariable;
@@ -36,6 +39,19 @@ public class MyApplication extends Application {
         this.pinnedlng = someVariable;
     }
 
+    public void setReq_id(String req_id) {
+        this.req_id = req_id;
+    }
+
+    public void setRole(String role) {
+        Role = role;
+    }
+
+    public void setReq_location(String req_location) {
+        this.req_location = req_location;
+    }
+
+
     public String getStatus() {
         return token;
     }
@@ -60,6 +76,16 @@ public class MyApplication extends Application {
         return pinnedlng;
     }
 
+    public String getReq_id() {
+        return req_id;
+    }
 
+    public String getRole() {
+        return Role;
+    }
+
+    public String getReq_location() {
+        return req_location;
+    }
 
 }
