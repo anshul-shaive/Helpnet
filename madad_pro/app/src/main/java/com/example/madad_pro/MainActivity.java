@@ -168,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     public void emergency(View view)
     {   SharedPreferences prefs = getSharedPreferences("token_sp", MODE_PRIVATE);
         String req_id = prefs.getString("req_id", "");
@@ -192,6 +191,14 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.finish();
         }
     }
+
+    public void general(View view)
+    {
+        Intent intent = new Intent(MainActivity.this,Nav_Main.class);
+        startActivity(intent);
+        MainActivity.this.finish();
+    }
+
 
     public void helpOthers(View view)
     {
