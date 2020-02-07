@@ -1,7 +1,9 @@
 package com.example.madad_pro;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,12 +42,14 @@ public class dialog_handler extends AppCompatDialogFragment{
     private String user_id;
     private Double pinnedLat =0.0;
     private Double pinnedLng =0.0;
-
+    SharedPreferences.Editor editor;
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-dd/MM/yyyy", Locale.getDefault());
 
-    private String currentDateandTime = sdf.format(new Date());
+    private String currentDateandTime;
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -55,6 +59,7 @@ public class dialog_handler extends AppCompatDialogFragment{
 
         Spinner crime_category = view.findViewById(R.id.spinner);
         Switch auth_toggle = (Switch) view.findViewById(R.id.switch1);
+        editor = this.getActivity().getSharedPreferences("token_sp", Context.MODE_PRIVATE).edit();
 
         user_id = ((MyApplication) getActivity().getApplication()).getUser_id();
         pinnedLat = ((MyApplication) getActivity().getApplication()).getPinnedlat();
@@ -117,6 +122,10 @@ public class dialog_handler extends AppCompatDialogFragment{
                         intent.putExtra("req_id",response);
                         intent.putExtra("loc",""+pinnedLat+":"+pinnedLng);
 
+                        editor.putString("loc", ""+pinnedLat+":"+pinnedLng);
+                        editor.putString("req_id", response);
+                        editor.apply();
+
                         startActivity(intent);
                         getActivity().finish();
                     }
@@ -140,6 +149,7 @@ public class dialog_handler extends AppCompatDialogFragment{
                 params.put("status","active");
                 params.put("username","");
                 params.put("user_id",""+user_id);
+                currentDateandTime = sdf.format(new Date());
                 params.put("req_time",""+currentDateandTime);
                 params.put("nprespond","0");
                 params.put("location",""+pinnedLat+":"+pinnedLng);

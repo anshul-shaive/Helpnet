@@ -8,6 +8,7 @@
     tools:context=".HelpInfo">
 
     <LinearLayout
+        android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -27,23 +28,39 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            tools:context=".HelpInfo"
-            android:layout_weight="1"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="30dp">
-
-
-
-
-        </LinearLayout>
+            android:layout_weight="1"
+            tools:context=".HelpInfo" />
 
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/cancel_help"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="648dp"
+        android:layout_marginEnd="245dp"
+        android:layout_marginBottom="35dp"
+        android:text="Cancel Request"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/resolved_help"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="229dp"
+        android:layout_marginTop="648dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="35dp"
+        android:text="Resolved"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,7 +21,11 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
@@ -30,8 +34,12 @@ public class Requests extends AppCompatActivity {
 
     String req_id,req_type,status,username,req_time,location,nprespond,auth_resp="";
     int user_id;
+    long difference,min;
     String jsonstr;
     public String url = "https://helpnet-web.herokuapp.com/update";
+    private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss-dd/MM/yyyy", Locale.getDefault());
+    private String currentDateandTime;
+
 
 //    private String url = "http://192.168.0.5:8000/update";
 
@@ -53,6 +61,13 @@ public class Requests extends AppCompatActivity {
             status=requestObject.getString("status");
             username=requestObject.getString("username");
             req_time=requestObject.getString("req_time");
+
+            currentDateandTime = sdf.format(new Date());
+            Date date1 = sdf.parse(currentDateandTime);
+            Date date2 = sdf.parse(req_time);
+            difference = date1.getTime() - date2.getTime();
+            min=difference/60000;
+
             location=requestObject.getString("location");
             nprespond=requestObject.getString("nprespond");
             auth_resp=requestObject.getString("auth_resp");
@@ -60,17 +75,26 @@ public class Requests extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
 
         TextView reqTextView = (TextView) findViewById(R.id.req_idTv);
         reqTextView.setText("Request Id: "+req_id);
+
         TextView statusTv = (TextView) findViewById(R.id.statusTv);
         statusTv.setText(status);
+
         TextView reqtypeTv = (TextView) findViewById(R.id.req_typeTv);
         reqtypeTv.setText("Request Type: "+req_type);
+
+        TextView reqtimeTv = (TextView) findViewById(R.id.reqtimeTv);
+        reqtimeTv.setText("Request Time: "+min+" mins ago");
+
         TextView npresTv = (TextView) findViewById(R.id.nprespondTv);
         npresTv.setText("No. of people responded: "+nprespond);
+
         TextView authresTv = (TextView) findViewById(R.id.authrespTv);
         authresTv.setText("Authority Informed: "+auth_resp);
 
@@ -103,7 +127,15 @@ public class Requests extends AppCompatActivity {
                         spotsDialog.dismiss();
                         Intent intent = new Intent(Requests.this, MapsActivity.class);
                         intent.putExtra("req_location",location);
+                        intent.putExtra("req_id",req_id);
+
+                        SharedPreferences.Editor editor = getSharedPreferences("token_sp", MODE_PRIVATE).edit();
+                        editor.putString("req_location",location);
+                        editor.putString("req_id", req_id);
+                        editor.apply();
+
                         startActivity(intent);
+                        Requests.this.finish();
 
                     }
                 },
@@ -125,6 +157,8 @@ public class Requests extends AppCompatActivity {
 
                 params.put("user_id","" +user_id);
                 params.put("req_id","" +req_id);
+                params.put("status","responding");
+
                 return params;
             }
 

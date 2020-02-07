@@ -81,46 +81,52 @@ public String url = "https://helpnet-web.herokuapp.com/login";
                     public void onResponse(String response) {
 
                         JSONObject jObject;
-                        String user_id="0";
-                        String status="";
+                        String user_id = "0";
+                        String status = "";
 
                         Log.d("", response);
                         System.out.println(response);
 
-
-                        try {
-                            jObject = new JSONObject(response);
-                            status = jObject.getString("status");
-                            user_id = jObject.getString("user_id");
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        Toast.makeText(login.this, "" + status, Toast.LENGTH_LONG).show();
-
-                        SharedPreferences.Editor editor = getSharedPreferences("token_sp", MODE_PRIVATE).edit();
-                        editor.putString("token", status);
-                        editor.putInt("user_id", Integer.parseInt(user_id));
-                        editor.apply();
-
-                        ((MyApplication) login.this.getApplication()).setUser_id(user_id);
-                        ((MyApplication) login.this.getApplication()).setStatus(status);
-
-                        Intent intent;
-
-                        if(status.equals("verified")) {
+                        if (response.equals("Wrong Password")) {
                             spotsDialog.dismiss();
-                            intent = new Intent(login.this, MainActivity.class);
+                            Toast.makeText(login.this, "Wrong Password", Toast.LENGTH_LONG).show();
+
                         }
                         else {
-                            spotsDialog.dismiss();
-                            Snackbar incorrect = Snackbar.make(coordinatorLayout,"Incorrect Username Or Password",Snackbar.LENGTH_LONG);
-                            intent = new Intent(login.this, Option.class);
+
+                            try {
+                                jObject = new JSONObject(response);
+                                status = jObject.getString("status");
+                                user_id = jObject.getString("user_id");
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(login.this, "" + status, Toast.LENGTH_LONG).show();
+
+                            SharedPreferences.Editor editor = getSharedPreferences("token_sp", MODE_PRIVATE).edit();
+                            editor.putString("token", status);
+                            editor.putInt("user_id", Integer.parseInt(user_id));
+                            editor.apply();
+
+                            ((MyApplication) login.this.getApplication()).setUser_id(user_id);
+                            ((MyApplication) login.this.getApplication()).setStatus(status);
+
+                            Intent intent;
+
+                            if (status.equals("verified")) {
+                                spotsDialog.dismiss();
+                                intent = new Intent(login.this, MainActivity.class);
+                            } else {
+                                spotsDialog.dismiss();
+                                intent = new Intent(login.this, Option.class);
+                                Toast.makeText(login.this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                            }
+
+                            startActivity(intent);
+                            login.this.finish();
+
                         }
-
-                        startActivity(intent);
-                        login.this.finish();
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -128,6 +134,12 @@ public String url = "https://helpnet-web.herokuapp.com/login";
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", String.valueOf(error));
+                        spotsDialog.dismiss();
+                        Intent intent;
+                        intent = new Intent(login.this, Option.class);
+                        Toast.makeText(login.this, "Please try again if registered or Sign Up", Toast.LENGTH_LONG).show();
+                        startActivity(intent);
+                        login.this.finish();
                     }
                 }
         ) {

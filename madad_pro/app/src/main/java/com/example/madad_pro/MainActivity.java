@@ -169,10 +169,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void emergency(View view)
-    {
-        Intent intent = new Intent(MainActivity.this,help2.class);
-        startActivity(intent);
-        MainActivity.this.finish();
+    {   SharedPreferences prefs = getSharedPreferences("token_sp", MODE_PRIVATE);
+        String req_id = prefs.getString("req_id", "");
+        String loc = prefs.getString("loc", "");
+
+        if(! req_id.equals("")){
+
+            Intent intent = new Intent(MainActivity.this,HelpInfo.class);
+            intent.putExtra("req_id",req_id);
+            intent.putExtra("loc",loc);
+            intent.putExtra("flag",1);
+            intent.putExtra("resume",1);
+
+
+            startActivity(intent);
+            MainActivity.this.finish();
+        }
+        else {
+            Intent intent = new Intent(MainActivity.this, help2.class);
+            startActivity(intent);
+            MainActivity.this.finish();
+        }
     }
 
     public void general(View view)
@@ -185,7 +202,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void helpOthers(View view)
     {
-        sendAndRequestResponse();
+        SharedPreferences prefs = getSharedPreferences("token_sp", MODE_PRIVATE);
+        String req_id = prefs.getString("req_id", "");
+        String req_location = prefs.getString("req_location", "");
+        if(! req_id.equals("")){
+
+            Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+            intent.putExtra("req_id",req_id);
+            intent.putExtra("req_location",req_location);
+            startActivity(intent);
+            MainActivity.this.finish();
+        }
+        else {
+            sendAndRequestResponse();
+        }
 
     }
 
