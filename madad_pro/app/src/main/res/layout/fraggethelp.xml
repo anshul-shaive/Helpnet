@@ -16,11 +16,11 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_weight="1"
-        tools:context=".help">
+        tools:context=".General">
 
 
         <ImageView
-            android:id="@+id/pin"
+            android:id="@+id/general_pin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp">
             <fragment
-                android:id="@+id/autocomplete_fragment"
+                android:id="@+id/general_autocomplete_fragment"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
 
                 android:layout_width="match_parent"
@@ -60,7 +60,7 @@
 
 
     <Button
-        android:id="@+id/request"
+        android:id="@+id/general_request"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_margin="16dp"

@@ -2,6 +2,7 @@ package com.example.madad_pro;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import dmax.dialog.SpotsDialog;
 
@@ -42,22 +45,35 @@ public class Frag_HelpOthers extends Fragment {
     String rtypes;
     MyRecyclerViewAdapter adapter;
     public Context mContext;
-
-
+    Context context;
+    SpotsDialog spotsDialog;
+    View v;
     public String url = "https://helpnet-web.herokuapp.com/loc";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        v =inflater.inflate(R.layout.fraghelpothers, container, false);
+        context= Frag_HelpOthers.this.getActivity();
 
-
-        final SpotsDialog spotsDialog = new SpotsDialog(Frag_HelpOthers.this.getActivity());
-        spotsDialog.show();
+        SharedPreferences prefs = context.getSharedPreferences("token_sp", Context.MODE_PRIVATE);
+        user_id = prefs.getInt("user_id", 0);
 
         Lat = ((MyApplication) Frag_HelpOthers.this.getActivity().getApplication()).getLat();
         Lng = ((MyApplication) Frag_HelpOthers.this.getActivity().getApplication()).getLng();
 
-        RequestQueue queue = Volley.newRequestQueue(Frag_HelpOthers.this.getActivity());
+        spotsDialog = new SpotsDialog(v.getContext());
+
+        sendAndRequestResponse();
+
+        return v;
+
+    }
+
+
+    private void sendAndRequestResponse() {
+        RequestQueue queue = Volley.newRequestQueue(v.getContext());
+        spotsDialog.show();
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -90,7 +106,7 @@ public class Frag_HelpOthers extends Fragment {
                         }
 
                         // set up the RecyclerView
-                        RecyclerView recyclerView =getView().findViewById(R.id.rv_Animals);
+                        RecyclerView recyclerView = getView().findViewById(R.id.rv_Animals);
                         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
                         adapter = new MyRecyclerViewAdapter(getActivity(), reqList);
                         //adapter.setClickListener(getActivity().this);
@@ -104,6 +120,7 @@ public class Frag_HelpOthers extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
+                        spotsDialog.dismiss();
                         Log.d("Error.Response", String.valueOf(error));
                     }
                 }
@@ -128,9 +145,5 @@ public class Frag_HelpOthers extends Fragment {
 
         queue.add(postRequest);
 
-
-        return inflater.inflate(R.layout.fraghelpothers, container, false);
     }
 }
-
-
