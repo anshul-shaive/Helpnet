@@ -36,7 +36,7 @@ public class dialog_handler extends AppCompatDialogFragment{
 //    private String url = "http://192.168.0.5:8000/request";
 
 
-    private Boolean auth_involved= false;
+    private Boolean auth_involved= false,nearby_people=false,emergency_contacts=false;
     private String crime;
 
     private String user_id;
@@ -59,6 +59,10 @@ public class dialog_handler extends AppCompatDialogFragment{
 
         Spinner crime_category = view.findViewById(R.id.spinner);
         Switch auth_toggle = (Switch) view.findViewById(R.id.switch1);
+        Switch nearby_ppl_toggle = (Switch) view.findViewById(R.id.switch2);
+        Switch emergency_cont_toggle = (Switch) view.findViewById(R.id.switch3);
+
+
         editor = this.getActivity().getSharedPreferences("token_sp", Context.MODE_PRIVATE).edit();
 
         user_id = ((MyApplication) getActivity().getApplication()).getUser_id();
@@ -81,6 +85,20 @@ public class dialog_handler extends AppCompatDialogFragment{
             }
         });
 
+        nearby_ppl_toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                nearby_people=isChecked;
+            }
+        });
+
+        emergency_cont_toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                emergency_contacts=isChecked;
+            }
+        });
+
 
         TextView cancel = view.findViewById(R.id.cancel);
         TextView confirm = view.findViewById(R.id.confirm);
@@ -89,9 +107,6 @@ public class dialog_handler extends AppCompatDialogFragment{
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(getContext(),help2.class);
-//                startActivity(intent);
-//                getActivity().finish();
                 dismiss();
             }
         });
@@ -145,6 +160,9 @@ public class dialog_handler extends AppCompatDialogFragment{
                 Map<String, String> params = new HashMap<String, String>();
 
                 params.put("auth_resp","" +auth_involved.toString());
+                params.put("nearby_people","" +nearby_people.toString());
+                params.put("emergency_contacts","" +emergency_contacts.toString());
+       //         params.put("description","" +description.toString());
                 params.put("req_type",""+crime);
                 params.put("status","active");
                 params.put("username","");
